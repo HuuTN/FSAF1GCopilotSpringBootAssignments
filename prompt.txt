@@ -1,0 +1,68 @@
+Create 20 different prompt examples for common Java patterns
+
+
+ChatGPT đã nói:
+Here are 20 prompt examples for exploring and understanding common Java design patterns and coding patterns. These prompts are structured to help you learn, implement, or debug various Java patterns:
+
+🔁 Creational Patterns
+Singleton Pattern:
+"Explain and implement the Singleton pattern in Java. Include both eager and lazy initialization."
+
+Factory Pattern:
+"Give an example of the Factory Method pattern in Java for creating different types of notifications like Email, SMS, and Push."
+
+Abstract Factory Pattern:
+"Show how the Abstract Factory pattern can be used in Java to create UI components for different operating systems (e.g., Windows, macOS)."
+
+Builder Pattern:
+"Demonstrate the Builder pattern in Java for creating complex Pizza objects with multiple optional ingredients."
+
+Prototype Pattern:
+"Create a Java example using the Prototype pattern to clone objects in a document editor application."
+
+🔗 Structural Patterns
+Adapter Pattern:
+"How can the Adapter pattern be used in Java to integrate a legacy payment gateway with a new e-commerce system?"
+
+Decorator Pattern:
+"Provide a Java example of the Decorator pattern to add features to a coffee order (milk, sugar, whipped cream)."
+
+Facade Pattern:
+"Explain and implement a Facade pattern in Java that simplifies file compression operations (zip, rar, tar)."
+
+Proxy Pattern:
+"Show how the Proxy pattern can be used in Java to add access control for a video streaming service."
+
+Composite Pattern:
+"Implement the Composite pattern in Java for representing a file system with folders and files."
+
+🧠 Behavioral Patterns
+Strategy Pattern:
+"Demonstrate the Strategy pattern in Java to apply different sorting algorithms (bubble sort, quicksort, mergesort)."
+
+Observer Pattern:
+"Give a Java example of the Observer pattern for a weather station that notifies multiple display elements."
+
+Command Pattern:
+"Implement the Command pattern in Java for undo/redo functionality in a text editor."
+
+Chain of Responsibility:
+"Create a Java example of the Chain of Responsibility pattern for handling different levels of technical support requests."
+
+State Pattern:
+"Explain and implement the State pattern in Java to simulate a vending machine with multiple states."
+
+Template Method Pattern:
+"Show how the Template Method pattern can be used in Java to define a skeleton for processing different file types."
+
+Mediator Pattern:
+"Give a Java example of the Mediator pattern for coordinating communication between UI components in a dialog box."
+
+Iterator Pattern:
+"Implement a custom iterator in Java for a collection of books in a library."
+
+Visitor Pattern:
+"Demonstrate the Visitor pattern in Java to perform operations (like print, save) on different types of shapes."
+
+Memento Pattern:
+"Provide an example of the Memento pattern in Java to implement checkpoint/restore functionality in a game."
