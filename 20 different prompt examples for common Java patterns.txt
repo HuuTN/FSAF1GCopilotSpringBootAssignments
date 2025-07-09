@@ -1,0 +1,21 @@
+
+Implement a Singleton pattern in Java.
+Show how to use the Factory Method pattern for creating objects.
+Demonstrate the Observer pattern with a simple event system.
+Write a Java example of the Strategy pattern for sorting algorithms.
+Implement the Decorator pattern to add features to a class at runtime.
+Provide a sample of the Adapter pattern to integrate incompatible interfaces.
+Use the Command pattern to encapsulate a request as an object.
+Illustrate the Template Method pattern for a data processing workflow.
+Create a simple Proxy pattern for access control.
+Show the Builder pattern for constructing complex objects.
+Demonstrate the Chain of Responsibility pattern for handling requests.
+Implement the State pattern to change behavior based on state.
+Use the Iterator pattern to traverse a custom collection.
+Provide an example of the Composite pattern for tree structures.
+Show the Facade pattern to simplify a complex subsystem.
+Implement the Mediator pattern for communication between objects.
+Demonstrate the Memento pattern for saving and restoring object state.
+Use the Flyweight pattern to minimize memory usage with shared objects.
+Show the Bridge pattern to separate abstraction from implementation.
+Write a Java example of the Abstract Factory pattern for creating related objects.
