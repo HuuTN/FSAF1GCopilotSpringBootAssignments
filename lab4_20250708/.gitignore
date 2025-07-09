@@ -1,0 +1,31 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Others
+out/
+
+# Lombok
+*.lombok
+
+# Test reports
+/test-results/
+/test-output/
+
+# Application properties (nếu có thông tin nhạy cảm, có thể thêm dòng này)
+# src/main/resources/application.properties 
