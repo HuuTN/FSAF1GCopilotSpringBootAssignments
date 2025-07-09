@@ -1,0 +1,15 @@
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\entity\Order.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\repository\UserRepository.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\dto\UserDTO.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\service\UserService.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\entity\Category.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\repository\ProductRepository.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\entity\Product.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\RunApplication.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\entity\OrderItem.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\controller\UserController.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\exception\ResourceNotFoundException.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\entity\User.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\entity\base\Auditable.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\exception\GlobalExceptionHandler.java
+D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootLabs\Lab-20250709\ecommerce-platform\src\main\java\com\example\service\UserServiceImpl.java
