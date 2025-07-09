@@ -1,0 +1,41 @@
+-- -- file: src/main/resources/data.sql
+-- INSERT INTO category (name) VALUES ('Electronics'), ('Books'), ('Clothing'), ('Home'), ('Toys');
+
+-- INSERT INTO product (name, price, stock, category_id) VALUES ('Smart TV', 800.00, 30, 1);
+-- INSERT INTO product (name, price, stock, category_id) VALUES ('Clean Code', 35.00, 150, 2);
+-- INSERT INTO product (name, price, stock, category_id) VALUES ('Wireless Mouse', 25.00, 200, 1);
+-- INSERT INTO product (name, price, stock, category_id) VALUES ('Bluetooth Speaker', 120.00, 50, 1);
+-- INSERT INTO product (name, price, stock, category_id) VALUES ('Java Concurrency in Practice', 45.00, 80, 2);
+-- INSERT INTO product (name, price, stock, category_id) VALUES ('T-shirt', 15.00, 500, 3);
+-- INSERT INTO product (name, price, stock, category_id) VALUES ('Coffee Maker', 60.00, 40, 4);
+-- INSERT INTO product (name, price, stock, category_id) VALUES ('Board Game', 35.00, 60, 5);
+-- INSERT INTO product (name, price, stock, category_id) VALUES ('Laptop', 1200.00, 20, 1);
+-- INSERT INTO product (name, price, stock, category_id) VALUES ('Novel: The Pragmatic Programmer', 30.00, 100, 2);
+
+-- -- Sample users
+-- INSERT INTO user (username, email) VALUES ('alice', 'alice@example.com');
+-- INSERT INTO user (username, email) VALUES ('bob', 'bob@example.com');
+-- INSERT INTO user (username, email) VALUES ('charlie', 'charlie@example.com');
+-- INSERT INTO user (username, email) VALUES ('david', 'david@example.com');
+-- INSERT INTO user (username, email) VALUES ('eva', 'eva@example.com');
+-- INSERT INTO user (username, email) VALUES ('frank', 'frank@example.com');
+-- INSERT INTO user (username, email) VALUES ('grace', 'grace@example.com');
+-- INSERT INTO user (username, email) VALUES ('hannah', 'hannah@example.com');
+-- INSERT INTO user (username, email) VALUES ('ivan', 'ivan@example.com');
+-- INSERT INTO user (username, email) VALUES ('julia', 'julia@example.com');
+
+-- -- Sample orders (assuming user_id 1, 2, 3 exist)
+-- INSERT INTO orders (user_id) VALUES (1);
+-- INSERT INTO orders (user_id) VALUES (2);
+-- INSERT INTO orders (user_id) VALUES (3);
+-- INSERT INTO orders (user_id) VALUES (4);
+-- INSERT INTO orders (user_id) VALUES (5);
+
+-- -- Sample order items (assuming order_id 1, 2, 3, 4, 5 exist)
+-- INSERT INTO order_item (order_id, product_id, quantity, price) VALUES (1, 1, 1, 800.00);
+-- INSERT INTO order_item (order_id, product_id, quantity, price) VALUES (1, 3, 2, 25.00);
+-- INSERT INTO order_item (order_id, product_id, quantity, price) VALUES (2, 2, 1, 35.00);
+-- INSERT INTO order_item (order_id, product_id, quantity, price) VALUES (3, 6, 3, 15.00);
+-- INSERT INTO order_item (order_id, product_id, quantity, price) VALUES (3, 4, 1, 120.00);
+-- INSERT INTO order_item (order_id, product_id, quantity, price) VALUES (4, 5, 2, 45.00);
+-- INSERT INTO order_item (order_id, product_id, quantity, price) VALUES (5, 7, 1, 60.00);
