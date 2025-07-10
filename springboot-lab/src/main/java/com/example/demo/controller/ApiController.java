@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.*;
-import com.example.demo.repository.*;
 import com.example.demo.repository.specification.ProductSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -65,6 +64,11 @@ public class ApiController {
 
     @GetMapping("/orders/user/{userId}")
     public List<Order> getOrdersByUser(@PathVariable Long userId) { return orderService.findByUserId(userId); }
+
+    @PostMapping("/orders/{orderId}/process")
+    public void processOrder(@PathVariable Long orderId) {
+        orderService.processOrder(orderId);
+    }
 
     // User APIs
     @GetMapping("/users")

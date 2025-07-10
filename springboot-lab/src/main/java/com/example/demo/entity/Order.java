@@ -23,4 +23,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = OrderStatus.NEW;
 }

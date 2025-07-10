@@ -32,4 +32,20 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> findOrdersWithMinItems(int minItems) {
         return orderRepository.findOrdersWithMinItems(minItems);
     }
+
+    @Override
+    public void cancelOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+            .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
+        order.setStatus(com.example.demo.entity.OrderStatus.CANCELLED);
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void processOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+            .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
+        order.setStatus(com.example.demo.entity.OrderStatus.COMPLETED);
+        orderRepository.save(order);
+    }
 }

@@ -9,4 +9,6 @@ public interface OrderService {
     List<Order> findByUserId(Long userId);
     List<Order> findByOrderDateAfter(LocalDateTime date);
     List<Order> findOrdersWithMinItems(int minItems);
+    void cancelOrder(Long orderId);
+    void processOrder(Long orderId);
 }
