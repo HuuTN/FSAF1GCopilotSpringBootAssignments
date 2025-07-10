@@ -1,0 +1,5 @@
+# Created at 2025-07-09T17:58:51.141
+Boot Manifest-JAR contains absolute paths in classpath 'd:\Hoc Tap\Course\Copilot Java Spring\FSAF1GCopilotSpringBootLabs\Lab_Assignment_3\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+
