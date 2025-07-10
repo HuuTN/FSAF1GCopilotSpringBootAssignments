@@ -1,0 +1,5 @@
+# Created at 2025-07-10T23:30:32.590
+Boot Manifest-JAR contains absolute paths in classpath 'D:\i-Folder\TRAINING\1. Github Copilot\FSAF1GCopilotSpringBootAssignments\Assignment-20250710\ecommerce-platform\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

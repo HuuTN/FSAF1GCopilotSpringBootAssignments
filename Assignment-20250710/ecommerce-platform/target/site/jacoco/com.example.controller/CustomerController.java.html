@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ecommerce Platform Project</a> &gt; <a href="index.source.html" class="el_package">com.example.controller</a> &gt; <span class="el_source">CustomerController.java</span></div><h1>CustomerController.java</h1><pre class="source lang-java linenums">package com.example.controller;
+
+import com.example.entity.Customer;
+import com.example.service.CustomerService;
+import com.example.exception.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping(&quot;/api/v1/customers&quot;)
+@Tag(name = &quot;Customer Management&quot;, description = &quot;Operations for managing customers&quot;)
+public class CustomerController {
+    
+    private final CustomerService customerService;
+    
+    @Autowired
+<span class="fc" id="L26">    public CustomerController(CustomerService customerService) {</span>
+<span class="fc" id="L27">        this.customerService = customerService;</span>
+<span class="fc" id="L28">    }</span>
+    
+    @Operation(summary = &quot;Get all customers&quot;, description = &quot;Retrieve a list of all customers&quot;)
+    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successfully retrieved list of customers&quot;)
+    @GetMapping
+    public ResponseEntity&lt;List&lt;Customer&gt;&gt; getAllCustomers() {
+<span class="nc" id="L34">        List&lt;Customer&gt; customers = customerService.getAllCustomers();</span>
+<span class="nc" id="L35">        return ResponseEntity.ok(customers);</span>
+    }
+    
+    @Operation(summary = &quot;Get customer by ID&quot;, description = &quot;Retrieve a customer by their ID&quot;)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Customer found&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Customer not found&quot;)
+    })
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Customer&gt; getCustomerById(@PathVariable Long id) {
+<span class="nc" id="L45">        Optional&lt;Customer&gt; customer = customerService.getCustomerById(id);</span>
+<span class="nc" id="L46">        return customer.map(ResponseEntity::ok)</span>
+<span class="nc" id="L47">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Customer not found with id: &quot; + id));</span>
+    }
+    
+    @Operation(summary = &quot;Get customer by email&quot;, description = &quot;Retrieve a customer by their email address&quot;)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Customer found&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Customer not found&quot;)
+    })
+    @GetMapping(&quot;/email/{email}&quot;)
+    public ResponseEntity&lt;Customer&gt; getCustomerByEmail(@PathVariable String email) {
+<span class="fc" id="L57">        Optional&lt;Customer&gt; customer = customerService.getCustomerByEmail(email);</span>
+<span class="pc" id="L58">        return customer.map(ResponseEntity::ok)</span>
+<span class="pc" id="L59">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Customer not found with email: &quot; + email));</span>
+    }
+    
+    @Operation(summary = &quot;Create a new customer&quot;, description = &quot;Create a new customer&quot;)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Customer created successfully&quot;),
+            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Invalid input&quot;)
+    })
+    @PostMapping
+    public ResponseEntity&lt;Customer&gt; createCustomer(@RequestBody Customer customer) {
+<span class="nc" id="L69">        Customer createdCustomer = customerService.createCustomer(customer);</span>
+<span class="nc" id="L70">        return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);</span>
+    }
+    
+    @Operation(summary = &quot;Update customer&quot;, description = &quot;Update an existing customer&quot;)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Customer updated successfully&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Customer not found&quot;),
+            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Invalid input&quot;)
+    })
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Customer&gt; updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
+<span class="nc" id="L81">        Customer updatedCustomer = customerService.updateCustomer(id, customer);</span>
+<span class="nc" id="L82">        return ResponseEntity.ok(updatedCustomer);</span>
+    }
+    
+    @Operation(summary = &quot;Delete customer&quot;, description = &quot;Delete a customer by ID&quot;)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Customer deleted successfully&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Customer not found&quot;)
+    })
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteCustomer(@PathVariable Long id) {
+<span class="nc" id="L92">        customerService.deleteCustomer(id);</span>
+<span class="nc" id="L93">        return ResponseEntity.noContent().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

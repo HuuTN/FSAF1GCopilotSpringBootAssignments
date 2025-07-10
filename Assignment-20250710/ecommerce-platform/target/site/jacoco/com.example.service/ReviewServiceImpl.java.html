@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReviewServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ecommerce Platform Project</a> &gt; <a href="index.source.html" class="el_package">com.example.service</a> &gt; <span class="el_source">ReviewServiceImpl.java</span></div><h1>ReviewServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.service;
+
+import com.example.entity.Review;
+import com.example.entity.Product;
+import com.example.entity.Customer;
+import com.example.repository.ReviewRepository;
+import com.example.repository.ProductRepository;
+import com.example.repository.CustomerRepository;
+import com.example.exception.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional
+public class ReviewServiceImpl implements ReviewService {
+    
+    private final ReviewRepository reviewRepository;
+    private final ProductRepository productRepository;
+    private final CustomerRepository customerRepository;
+    
+    @Autowired
+    public ReviewServiceImpl(ReviewRepository reviewRepository, 
+                           ProductRepository productRepository, 
+<span class="fc" id="L28">                           CustomerRepository customerRepository) {</span>
+<span class="fc" id="L29">        this.reviewRepository = reviewRepository;</span>
+<span class="fc" id="L30">        this.productRepository = productRepository;</span>
+<span class="fc" id="L31">        this.customerRepository = customerRepository;</span>
+<span class="fc" id="L32">    }</span>
+    
+    @Override
+    public List&lt;Review&gt; getAllReviews() {
+<span class="nc" id="L36">        return reviewRepository.findAll();</span>
+    }
+    
+    @Override
+    public Optional&lt;Review&gt; getReviewById(Long id) {
+<span class="nc" id="L41">        return reviewRepository.findById(id);</span>
+    }
+    
+    @Override
+    public List&lt;Review&gt; getReviewsByProductId(Long productId) {
+<span class="nc" id="L46">        return reviewRepository.findByProductId(productId);</span>
+    }
+    
+    @Override
+    public List&lt;Review&gt; getReviewsByCustomerId(Long customerId) {
+<span class="nc" id="L51">        return reviewRepository.findByCustomerId(customerId);</span>
+    }
+    
+    @Override
+    public List&lt;Review&gt; getReviewsByRating(Integer rating) {
+<span class="nc" id="L56">        return reviewRepository.findByRating(rating);</span>
+    }
+    
+    @Override
+    public Review createReview(Long productId, Long customerId, Integer rating, String reviewContent) {
+        // Check if customer has already reviewed this product
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (hasCustomerReviewedProduct(customerId, productId)) {</span>
+<span class="nc" id="L63">            throw new IllegalArgumentException(&quot;Customer has already reviewed this product&quot;);</span>
+        }
+        
+        // Find product
+<span class="fc" id="L67">        Product product = productRepository.findById(productId)</span>
+<span class="pc" id="L68">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Product not found with id: &quot; + productId));</span>
+        
+        // Find customer
+<span class="nc" id="L71">        Customer customer = customerRepository.findById(customerId)</span>
+<span class="nc" id="L72">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Customer not found with id: &quot; + customerId));</span>
+        
+        // Create review
+<span class="nc" id="L75">        Review review = new Review();</span>
+<span class="nc" id="L76">        review.setProduct(product);</span>
+<span class="nc" id="L77">        review.setCustomer(customer);</span>
+<span class="nc" id="L78">        review.setRating(rating);</span>
+<span class="nc" id="L79">        review.setReviewContent(reviewContent);</span>
+        
+<span class="nc" id="L81">        return reviewRepository.save(review);</span>
+    }
+    
+    @Override
+    public Review updateReview(Long id, Integer rating, String reviewContent) {
+<span class="nc" id="L86">        Review existingReview = reviewRepository.findById(id)</span>
+<span class="nc" id="L87">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Review not found with id: &quot; + id));</span>
+        
+<span class="nc" id="L89">        existingReview.setRating(rating);</span>
+<span class="nc" id="L90">        existingReview.setReviewContent(reviewContent);</span>
+        
+<span class="nc" id="L92">        return reviewRepository.save(existingReview);</span>
+    }
+    
+    @Override
+    public void deleteReview(Long id) {
+<span class="nc" id="L97">        Review review = reviewRepository.findById(id)</span>
+<span class="nc" id="L98">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Review not found with id: &quot; + id));</span>
+<span class="nc" id="L99">        reviewRepository.delete(review);</span>
+<span class="nc" id="L100">    }</span>
+    
+    @Override
+    public Double getAverageRatingByProductId(Long productId) {
+<span class="nc" id="L104">        return reviewRepository.findAverageRatingByProductId(productId);</span>
+    }
+    
+    @Override
+    public Long getReviewCountByProductId(Long productId) {
+<span class="nc" id="L109">        return reviewRepository.countReviewsByProductId(productId);</span>
+    }
+    
+    @Override
+    public List&lt;Review&gt; getReviewsByProductIdSortedByDate(Long productId) {
+<span class="nc" id="L114">        return reviewRepository.findByProductIdOrderByCreatedAtDesc(productId);</span>
+    }
+    
+    @Override
+    public List&lt;Review&gt; getReviewsByCustomerIdSortedByDate(Long customerId) {
+<span class="nc" id="L119">        return reviewRepository.findByCustomerIdOrderByCreatedAtDesc(customerId);</span>
+    }
+    
+    @Override
+    public boolean hasCustomerReviewedProduct(Long customerId, Long productId) {
+<span class="fc" id="L124">        List&lt;Review&gt; existingReviews = reviewRepository.findByProductIdAndCustomerId(productId, customerId);</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        return !existingReviews.isEmpty();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

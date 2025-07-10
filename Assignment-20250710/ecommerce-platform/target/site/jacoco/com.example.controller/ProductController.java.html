@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ecommerce Platform Project</a> &gt; <a href="index.source.html" class="el_package">com.example.controller</a> &gt; <span class="el_source">ProductController.java</span></div><h1>ProductController.java</h1><pre class="source lang-java linenums">package com.example.controller;
+
+import com.example.entity.Product;
+import com.example.repository.ProductRepository;
+import com.example.dto.ProductDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping(&quot;/api/v1/products&quot;)
+<span class="fc" id="L21">public class ProductController {</span>
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Operation(summary = &quot;Top 5 products by total sales amount&quot;, description = &quot;Get the top 5 products with the highest total sales amount.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Top 5 products returned successfully&quot;)
+    })
+    @GetMapping(&quot;/top5-by-sales&quot;)
+    public List&lt;ProductDTO&gt; getTop5ProductsByTotalSales() {
+<span class="nc" id="L32">        List&lt;Object[]&gt; results = productRepository.findTop5ProductsByTotalAmount();</span>
+<span class="nc" id="L33">        return results.stream().map(obj -&gt; new ProductDTO(</span>
+<span class="nc" id="L34">                ((Number) obj[0]).longValue(), // id</span>
+                (String) obj[1],               // name
+                (java.math.BigDecimal) obj[2], // price
+<span class="nc" id="L37">                ((Number) obj[3]).intValue(),  // stock</span>
+<span class="nc" id="L38">                ((Number) obj[4]).longValue(), // categoryId</span>
+                (String) obj[5]                // categoryName
+<span class="nc" id="L40">        )).toList();</span>
+    }
+
+    @Operation(summary = &quot;Search products&quot;, description = &quot;Search for products by keyword and max price, with pagination.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Products found and returned successfully&quot;)
+    })
+    @GetMapping(&quot;/search&quot;)
+    public Page&lt;ProductDTO&gt; searchProducts(
+            @RequestParam String keyword,
+            @RequestParam BigDecimal maxPrice,
+            @RequestParam(defaultValue = &quot;0&quot;) int page,
+            @RequestParam(defaultValue = &quot;10&quot;) int size
+    ) {
+<span class="fc" id="L54">        Page&lt;Product&gt; products = productRepository.searchProducts(keyword, maxPrice, PageRequest.of(page, size));</span>
+<span class="pc" id="L55">        List&lt;ProductDTO&gt; dtos = products.stream().map(product -&gt; new ProductDTO(</span>
+<span class="nc" id="L56">                product.getId(),</span>
+<span class="nc" id="L57">                product.getName(),</span>
+<span class="nc" id="L58">                product.getPrice(),</span>
+<span class="nc" id="L59">                product.getStock(),</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                product.getCategory() != null ? product.getCategory().getId() : null,</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">                product.getCategory() != null ? product.getCategory().getName() : null</span>
+<span class="fc" id="L62">        )).collect(Collectors.toList());</span>
+<span class="fc" id="L63">        return new PageImpl&lt;&gt;(dtos, products.getPageable(), products.getTotalElements());</span>
+    }
+
+    @Operation(summary = &quot;Count products by category&quot;, description = &quot;Get the number of products in a specific category.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Count returned successfully&quot;)
+    })
+    @GetMapping(&quot;/count-by-category/{categoryId}&quot;)
+    public int countByCategory(@PathVariable Long categoryId) {
+<span class="nc" id="L72">        return productRepository.countByCategoryId(categoryId);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

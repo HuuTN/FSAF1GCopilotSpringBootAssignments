@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ecommerce Platform Project</a> &gt; <a href="index.source.html" class="el_package">com.example.entity</a> &gt; <span class="el_source">OrderItem.java</span></div><h1>OrderItem.java</h1><pre class="source lang-java linenums">// A JPA entity for OrderItem with many-to-one relationships to Order and Product.
+package com.example.entity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import java.math.BigDecimal;
+import java.util.Objects;
+
+<span class="pc" id="L11">@Data</span>
+<span class="fc" id="L12">@NoArgsConstructor</span>
+<span class="nc" id="L13">@AllArgsConstructor</span>
+<span class="nc" id="L14">@ToString</span>
+@Entity
+@Table(name = &quot;order_items&quot;)
+public class OrderItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = &quot;order_item_seq&quot;)
+    @SequenceGenerator(name = &quot;order_item_seq&quot;, sequenceName = &quot;order_item_seq&quot;, allocationSize = 1)
+<span class="nc" id="L21">    private Long id;</span>
+
+    @ManyToOne
+    @JoinColumn(name = &quot;order_id&quot;, nullable = false)
+<span class="nc" id="L25">    private Order order;</span>
+
+    @ManyToOne
+    @JoinColumn(name = &quot;product_id&quot;, nullable = false)
+<span class="fc" id="L29">    private Product product;</span>
+
+    @Column(nullable = false)
+<span class="fc" id="L32">    private int quantity;</span>
+
+    @Column(nullable = false)
+<span class="nc" id="L35">    private BigDecimal price;</span>
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (this == o) return true;</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (!(o instanceof OrderItem orderItem)) return false;</span>
+<span class="nc" id="L41">        return Objects.equals(id, orderItem.id);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L46">        return Objects.hash(id);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

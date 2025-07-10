@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ecommerce Platform Project</a> &gt; <a href="index.source.html" class="el_package">com.example.service</a> &gt; <span class="el_source">CustomerServiceImpl.java</span></div><h1>CustomerServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.service;
+
+import com.example.entity.Customer;
+import com.example.repository.CustomerRepository;
+import com.example.exception.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional
+public class CustomerServiceImpl implements CustomerService {
+    
+    private final CustomerRepository customerRepository;
+    
+    @Autowired
+<span class="fc" id="L20">    public CustomerServiceImpl(CustomerRepository customerRepository) {</span>
+<span class="fc" id="L21">        this.customerRepository = customerRepository;</span>
+<span class="fc" id="L22">    }</span>
+    
+    @Override
+    public List&lt;Customer&gt; getAllCustomers() {
+<span class="nc" id="L26">        return customerRepository.findAll();</span>
+    }
+    
+    @Override
+    public Optional&lt;Customer&gt; getCustomerById(Long id) {
+<span class="nc" id="L31">        return customerRepository.findById(id);</span>
+    }
+    
+    @Override
+    public Optional&lt;Customer&gt; getCustomerByEmail(String email) {
+<span class="fc" id="L36">        return customerRepository.findByEmail(email);</span>
+    }
+    
+    @Override
+    public Customer createCustomer(Customer customer) {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (customerRepository.existsByEmail(customer.getEmail())) {</span>
+<span class="nc" id="L42">            throw new IllegalArgumentException(&quot;Customer with email &quot; + customer.getEmail() + &quot; already exists&quot;);</span>
+        }
+<span class="nc" id="L44">        return customerRepository.save(customer);</span>
+    }
+    
+    @Override
+    public Customer updateCustomer(Long id, Customer customer) {
+<span class="nc" id="L49">        Customer existingCustomer = customerRepository.findById(id)</span>
+<span class="nc" id="L50">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Customer not found with id: &quot; + id));</span>
+        
+        // Update fields
+<span class="nc" id="L53">        existingCustomer.setName(customer.getName());</span>
+<span class="nc" id="L54">        existingCustomer.setEmail(customer.getEmail());</span>
+<span class="nc" id="L55">        existingCustomer.setAddress(customer.getAddress());</span>
+<span class="nc" id="L56">        existingCustomer.setPhone(customer.getPhone());</span>
+        // Note: Password update should be handled separately with proper hashing
+        
+<span class="nc" id="L59">        return customerRepository.save(existingCustomer);</span>
+    }
+    
+    @Override
+    public void deleteCustomer(Long id) {
+<span class="nc" id="L64">        Customer customer = customerRepository.findById(id)</span>
+<span class="nc" id="L65">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Customer not found with id: &quot; + id));</span>
+<span class="nc" id="L66">        customerRepository.delete(customer);</span>
+<span class="nc" id="L67">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

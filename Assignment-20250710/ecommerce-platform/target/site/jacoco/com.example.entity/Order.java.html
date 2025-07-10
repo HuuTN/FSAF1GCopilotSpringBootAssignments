@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Order.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ecommerce Platform Project</a> &gt; <a href="index.source.html" class="el_package">com.example.entity</a> &gt; <span class="el_source">Order.java</span></div><h1>Order.java</h1><pre class="source lang-java linenums">// A JPA for Order with a one-to-many relationship to OrderItem entities. The relationship should casecade all operations.
+package com.example.entity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
+import com.example.entity.base.Auditable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+<span class="fc" id="L15">@Data</span>
+<span class="fc" id="L16">@NoArgsConstructor</span>
+<span class="nc" id="L17">@AllArgsConstructor</span>
+<span class="nc" id="L18">@ToString</span>
+@Entity
+@Table(name = &quot;orders&quot;)
+public class Order extends Auditable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = &quot;order_seq&quot;)
+    @SequenceGenerator(name = &quot;order_seq&quot;, sequenceName = &quot;order_seq&quot;, allocationSize = 1)
+<span class="nc" id="L25">    private Long id;</span>
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;customer_id&quot;, nullable = false)
+    @JsonBackReference
+<span class="fc" id="L30">    private Customer customer;</span>
+
+
+    @Column(name = &quot;total_amount&quot;, nullable = false)
+<span class="fc" id="L34">    private BigDecimal totalAmount;</span>
+
+    @Column(name = &quot;status&quot;, nullable = false)
+<span class="fc" id="L37">    private String status;</span>
+
+    @OneToMany(mappedBy = &quot;order&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+<span class="fc" id="L40">    private List&lt;OrderItem&gt; items;</span>
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;user_id&quot;, nullable = false)
+    @JsonBackReference
+<span class="fc" id="L45">    private User user;</span>
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (this == o) return true;</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (!(o instanceof Order order)) return false;</span>
+<span class="nc" id="L51">        return Objects.equals(id, order.id);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L56">        return Objects.hash(id);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
