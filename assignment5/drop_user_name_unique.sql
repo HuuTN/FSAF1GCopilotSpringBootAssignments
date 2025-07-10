@@ -1,0 +1,1 @@
+ALTER TABLE user DROP INDEX UKgj2fy3dcix7ph7k8684gka40c; 
