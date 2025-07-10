@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: com.example.demo.service.UserServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 16.61 s <<< FAILURE! -- in com.example.demo.service.UserServiceImplTest
+com.example.demo.service.UserServiceImplTest.createUser_shouldReturnSavedUserDto -- Time elapsed: 0.087 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.demo.entity.User.getId()" because "savedUser" is null
+	at com.example.demo.service.UserServiceImpl.createUser(UserServiceImpl.java:32)
+	at com.example.demo.service.UserServiceImplTest.createUser_shouldReturnSavedUserDto(UserServiceImplTest.java:36)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+

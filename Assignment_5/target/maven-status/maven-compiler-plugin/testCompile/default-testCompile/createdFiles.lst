@@ -1,0 +1,6 @@
+com\example\demo\service\OrderServiceTddTest.class
+com\example\demo\service\OrderServiceUnitTest.class
+com\example\demo\controller\UserControllerTest.class
+com\example\demo\BaseMySQLContainerTest.class
+com\example\demo\ECommerceWorkflowTest.class
+com\example\demo\repository\ProductRepositoryTest.class
