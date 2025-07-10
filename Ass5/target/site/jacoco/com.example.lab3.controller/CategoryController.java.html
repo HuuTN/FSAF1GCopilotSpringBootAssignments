@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoryController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lab3-springboot</a> &gt; <a href="index.source.html" class="el_package">com.example.lab3.controller</a> &gt; <span class="el_source">CategoryController.java</span></div><h1>CategoryController.java</h1><pre class="source lang-java linenums">package com.example.lab3.controller;
+
+import com.example.lab3.dto.CategoryDTO;
+import com.example.lab3.service.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping(&quot;/api/v1/categories&quot;)
+<span class="fc" id="L18">public class CategoryController {</span>
+    @Autowired
+    private CategoryService categoryService;
+
+    @Operation(summary = &quot;Get all categories with pagination&quot;)
+    @GetMapping
+    public Page&lt;CategoryDTO&gt; getAll(Pageable pageable) {
+<span class="nc" id="L25">        return categoryService.getAll(pageable);</span>
+    }
+
+    @Operation(summary = &quot;Get category by ID&quot;)
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;CategoryDTO&gt; getById(@PathVariable Long id) {
+<span class="nc" id="L31">        return categoryService.getById(id)</span>
+<span class="nc" id="L32">                .map(ResponseEntity::ok)</span>
+<span class="nc" id="L33">                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());</span>
+    }
+
+    @Operation(summary = &quot;Create new category&quot;)
+    @PostMapping
+    public ResponseEntity&lt;CategoryDTO&gt; create(@RequestBody @Valid CategoryDTO dto) {
+<span class="nc" id="L39">        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.create(dto));</span>
+    }
+
+    @Operation(summary = &quot;Update category by ID&quot;)
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;CategoryDTO&gt; update(@PathVariable Long id, @RequestBody @Valid CategoryDTO dto) {
+<span class="nc" id="L45">        return categoryService.update(id, dto)</span>
+<span class="nc" id="L46">                .map(ResponseEntity::ok)</span>
+<span class="nc" id="L47">                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());</span>
+    }
+
+    @Operation(summary = &quot;Delete category by ID&quot;)
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id) {
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        if (categoryService.delete(id)) {</span>
+<span class="nc" id="L54">            return ResponseEntity.noContent().build();</span>
+        } else {
+<span class="nc" id="L56">            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
