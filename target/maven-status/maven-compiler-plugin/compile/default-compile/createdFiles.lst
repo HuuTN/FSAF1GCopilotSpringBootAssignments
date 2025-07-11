@@ -1,0 +1,3 @@
+com\example\Application.class
+com\example\repository\base\BaseRepository.class
+com\example\entity\base\Auditable.class
