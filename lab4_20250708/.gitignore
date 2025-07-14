@@ -27,5 +27,10 @@ out/
 /test-results/
 /test-output/
 
-# Application properties (nếu có thông tin nhạy cảm, có thể thêm dòng này)
-# src/main/resources/application.properties 
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
+/.apt_generated/
+/.apt_generated_tests/
