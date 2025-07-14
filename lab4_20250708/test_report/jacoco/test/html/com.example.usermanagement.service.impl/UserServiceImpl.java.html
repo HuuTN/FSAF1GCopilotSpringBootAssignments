@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">user-management</a> &gt; <a href="index.source.html" class="el_package">com.example.usermanagement.service.impl</a> &gt; <span class="el_source">UserServiceImpl.java</span></div><h1>UserServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.usermanagement.service.impl;
+
+import com.example.usermanagement.dto.UserDTO;
+import com.example.usermanagement.entity.User;
+import com.example.usermanagement.exception.EntityNotFoundException;
+import com.example.usermanagement.repository.UserRepository;
+import com.example.usermanagement.service.UserService;
+import com.example.usermanagement.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.dao.DataIntegrityViolationException;
+import java.time.LocalDateTime;
+
+@Service
+<span class="fc" id="L17">public class UserServiceImpl implements UserService {</span>
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserMapper userMapper;
+
+    @Override
+    public Page&lt;UserDTO&gt; getAllUsers(Pageable pageable) {
+<span class="fc" id="L25">        return userRepository.findAll(pageable).map(userMapper::toDTO);</span>
+    }
+
+    @Override
+    public UserDTO getUserById(Long id) {
+<span class="fc" id="L30">        User user = userRepository.findById(id)</span>
+<span class="fc" id="L31">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;User not found with id: &quot; + id));</span>
+<span class="fc" id="L32">        return userMapper.toDTO(user);</span>
+    }
+
+    @Override
+    public UserDTO createUser(UserDTO userDTO) {
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {</span>
+<span class="fc" id="L38">            throw new DataIntegrityViolationException(&quot;Email already exists&quot;);</span>
+        }
+<span class="fc" id="L40">        User user = userMapper.toEntity(userDTO);</span>
+<span class="fc" id="L41">        user.setCreatedAt(LocalDateTime.now());</span>
+<span class="fc" id="L42">        user.setUpdatedAt(LocalDateTime.now());</span>
+<span class="fc" id="L43">        return userMapper.toDTO(userRepository.save(user));</span>
+    }
+
+    @Override
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+<span class="fc" id="L48">        User user = userRepository.findById(id)</span>
+<span class="fc" id="L49">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;User not found with id: &quot; + id));</span>
+<span class="pc bpc" id="L50" title="1 of 4 branches missed.">        if (!user.getEmail().equals(userDTO.getEmail()) &amp;&amp; userRepository.findByEmail(userDTO.getEmail()).isPresent()) {</span>
+<span class="fc" id="L51">            throw new DataIntegrityViolationException(&quot;Email already exists&quot;);</span>
+        }
+<span class="fc" id="L53">        user.setName(userDTO.getName());</span>
+<span class="fc" id="L54">        user.setEmail(userDTO.getEmail());</span>
+<span class="fc" id="L55">        user.setUpdatedAt(LocalDateTime.now());</span>
+<span class="fc" id="L56">        return userMapper.toDTO(userRepository.save(user));</span>
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (!userRepository.existsById(id)) {</span>
+<span class="fc" id="L62">            throw new EntityNotFoundException(&quot;User not found with id: &quot; + id);</span>
+        }
+<span class="fc" id="L64">        userRepository.deleteById(id);</span>
+<span class="fc" id="L65">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
