@@ -1,6 +1,7 @@
 package com.example.usermanagement.controller;
 
 import com.example.usermanagement.dto.UserDTO;
+import com.example.usermanagement.service.OrderService;
 import com.example.usermanagement.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,8 @@ class UserControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private UserService userService;
+    @MockBean
+    private OrderService orderService;
     @Autowired
     private ObjectMapper objectMapper;
 

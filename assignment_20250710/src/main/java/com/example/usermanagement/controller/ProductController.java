@@ -26,8 +26,9 @@ public class ProductController {
     public ResponseEntity<Page<ProductDTO>> searchProducts(
             @RequestParam(required = false) String keywords,
             @RequestParam(required = false) BigDecimal price,
+            @RequestParam(required = false) Integer categoryId,
             @PageableDefault(size = 10) Pageable pageable) {
-        return ResponseEntity.ok(productService.search(keywords, price, pageable));
+        return ResponseEntity.ok(productService.search(keywords, price, categoryId,pageable));
     }
 
     @GetMapping("/{id}")

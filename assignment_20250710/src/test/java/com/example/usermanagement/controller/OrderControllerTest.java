@@ -3,6 +3,7 @@ package com.example.usermanagement.controller;
 import com.example.usermanagement.constant.OrderStatus;
 import com.example.usermanagement.dto.OrderPostRequest;
 import com.example.usermanagement.dto.OrderPostResponse;
+import com.example.usermanagement.dto.OrderItemRequest;
 import com.example.usermanagement.entity.Order;
 import com.example.usermanagement.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,14 +37,16 @@ class OrderControllerTest {
     void setUp() {
         request = new OrderPostRequest();
         request.setUserId(1L);
-        request.setProductId(1L);
-        request.setQuantity(2);
+        OrderItemRequest item = new OrderItemRequest();
+        item.setProductId(1L);
+        item.setQuantity(2);
+        request.setItems(java.util.List.of(item));
         order = Order.builder().id(10L).status(OrderStatus.CREATED).build();
     }
 
     @Test
     void createOrder_Success() throws Exception {
-        when(orderService.createOrder(any(Long.class), any(Long.class), any(Integer.class))).thenReturn(order);
+        when(orderService.createOrder(any())).thenReturn(order);
         mockMvc.perform(post("/api/v1/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))

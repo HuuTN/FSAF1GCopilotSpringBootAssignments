@@ -1,6 +1,8 @@
 package com.example.usermanagement.controller;
 
 import com.example.usermanagement.dto.UserDTO;
+import com.example.usermanagement.entity.Order;
+import com.example.usermanagement.service.OrderService;
 import com.example.usermanagement.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,12 +15,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/users")
 @Tag(name = "User API", description = "CRUD API for User management")
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping
     @Operation(summary = "Get all users with paging")
@@ -49,5 +55,12 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{userId}/orders")
+    @Operation(summary = "Get order history of a user")
+    public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
+        List<Order> orders = orderService.getOrdersByUserId(userId);
+        return ResponseEntity.ok(orders);
     }
 } 

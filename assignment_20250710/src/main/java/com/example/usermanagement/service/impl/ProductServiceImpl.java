@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 
 @Service
@@ -26,8 +27,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductMapper productMapper;
 
     @Override
-    public Page<ProductDTO> search(String keywords, BigDecimal price, Pageable pageable) {
-        return productRepository.search(keywords, price, pageable).map(productMapper::toDTO);
+    public Page<ProductDTO> search(String keywords, BigDecimal price, Integer categoryId, Pageable pageable) {
+        return productRepository.search(keywords, price, categoryId, pageable).map(productMapper::toDTO);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.example.usermanagement.entity.OrderItem;
 import com.example.usermanagement.entity.Product;
 import com.example.usermanagement.entity.User;
 import com.example.usermanagement.exception.EntityNotFoundException;
+import com.example.usermanagement.exception.InsufficientStockException;
 import com.example.usermanagement.repository.OrderItemRepository;
 import com.example.usermanagement.repository.OrderRepository;
 import com.example.usermanagement.repository.ProductRepository;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import com.example.usermanagement.dto.OrderPostRequest;
 
 @Service
 @Transactional
@@ -31,30 +33,36 @@ public class OrderServiceImpl implements OrderService {
     private OrderItemRepository orderItemRepository;
 
     @Override
-    public Order createOrder(Long userId, Long productId, int quantity) {
-        User user = userRepository.findById(userId)
+    @Transactional(rollbackFor = Exception.class)
+    public Order createOrder(OrderPostRequest request) {
+        User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
-        if (product.getStock() < quantity) {
-            throw new EntityNotFoundException("Not enough product in stock");
+        List<OrderItem> orderItems = new java.util.ArrayList<>();
+        for (var itemReq : request.getItems()) {
+            Product product = productRepository.findById(itemReq.getProductId())
+                    .orElseThrow(() -> new EntityNotFoundException("Product not found: " + itemReq.getProductId()));
+            if (product.getStock() < itemReq.getQuantity()) {
+                throw new InsufficientStockException("Not enough product in stock for productId: " + itemReq.getProductId());
+            }
+            product.setStock(product.getStock() - itemReq.getQuantity());
+            productRepository.save(product);
+            OrderItem item = OrderItem.builder()
+                    .product(product)
+                    .quantity(itemReq.getQuantity())
+                    .price(product.getPrice())
+                    .build();
+            orderItems.add(item);
         }
-        product.setStock(product.getStock() - quantity);
-        productRepository.save(product);
-
-        OrderItem item = OrderItem.builder()
-                .product(product)
-                .quantity(quantity)
-                .price(product.getPrice())
-                .build();
         Order order = Order.builder()
                 .user(user)
                 .status(OrderStatus.CREATED)
-                .orderItems(List.of(item))
+                .orderItems(orderItems)
                 .build();
-        item.setOrder(order);
+        for (OrderItem item : orderItems) {
+            item.setOrder(order);
+        }
         orderRepository.save(order);
-        orderItemRepository.save(item);
+        orderItemRepository.saveAll(orderItems);
         return order;
     }
 
@@ -80,5 +88,10 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
         order.setStatus(status);
         orderRepository.save(order);
+    }
+
+    @Override
+    public List<Order> getOrdersByUserId(Long userId) {
+        return orderRepository.findByUserId(userId);
     }
 } 

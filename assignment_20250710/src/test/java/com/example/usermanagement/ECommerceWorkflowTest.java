@@ -1,5 +1,6 @@
 package com.example.usermanagement;
 
+import com.example.usermanagement.dto.OrderItemRequest;
 import com.example.usermanagement.dto.OrderPostRequest;
 import com.example.usermanagement.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,11 +38,11 @@ class ECommerceWorkflowTest extends PostgresTestContainerConfig {
 
     @Test
     void fullOrderWorkflow() throws Exception {
-        // 1. Insert category thật vào DB
+        // 1. Insert category into DB
         Category category = Category.builder().name("Workflow Category").build();
         category = categoryRepository.save(category);
 
-        // 2. Tạo user
+        // 2. Create user
         UserDTO userDTO = UserDTO.builder().name("Workflow User").email("workflow@example.com").build();
         MvcResult userResult = mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -51,7 +53,7 @@ class ECommerceWorkflowTest extends PostgresTestContainerConfig {
         UserDTO createdUser = objectMapper.readValue(userResult.getResponse().getContentAsString(), UserDTO.class);
         assertThat(createdUser.getId()).isNotNull();
 
-        // 3. Tạo product (truyền categoryId thực tế)
+        // 3. Create product (set categoryId)
         String productJson = "{" +
                 "\"name\":\"Workflow Product\"," +
                 "\"price\":100," +
@@ -66,11 +68,14 @@ class ECommerceWorkflowTest extends PostgresTestContainerConfig {
                 .andReturn();
         Long productId = objectMapper.readTree(productResult.getResponse().getContentAsString()).get("id").asLong();
 
-        // 4. Đặt hàng
+        // 4. Create order
         OrderPostRequest orderRequest = new OrderPostRequest();
         orderRequest.setUserId(createdUser.getId());
-        orderRequest.setProductId(productId);
-        orderRequest.setQuantity(2);
+        OrderItemRequest orderItemRequest = new OrderItemRequest();
+
+        orderItemRequest.setProductId(productId);
+        orderItemRequest.setQuantity(2);
+        orderRequest.setItems(List.of(orderItemRequest));
         MvcResult orderResult = mockMvc.perform(post("/api/v1/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(orderRequest)))
@@ -80,7 +85,7 @@ class ECommerceWorkflowTest extends PostgresTestContainerConfig {
                 .andReturn();
         Long orderId = objectMapper.readTree(orderResult.getResponse().getContentAsString()).get("orderId").asLong();
 
-        // 5. Kiểm tra tồn kho sau khi đặt hàng
+        // 5. Check stock after order created
         MvcResult productAfterOrder = mockMvc.perform(get("/api/v1/products/" + productId))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -88,7 +93,7 @@ class ECommerceWorkflowTest extends PostgresTestContainerConfig {
         int stockAfterOrder = objectMapper.readTree(productAfterOrder.getResponse().getContentAsString()).get("stock").asInt();
         assertThat(stockAfterOrder).isEqualTo(3);
 
-        // 6. Huỷ đơn hàng (nếu có API huỷ đơn)
+        // 6. Cancel order
         // mockMvc.perform(post("/api/v1/orders/" + orderId + "/cancel"))
         //         .andExpect(status().isOk());
     }

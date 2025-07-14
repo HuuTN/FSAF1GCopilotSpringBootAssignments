@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 
 public interface ProductService {
-    Page<ProductDTO> search(String keywords, BigDecimal price, Pageable pageable);
+    Page<ProductDTO> search(String keywords, BigDecimal price, Integer categoryId,  Pageable pageable);
     ProductDTO getById(Long id);
     ProductDTO create(ProductDTO dto);
     ProductDTO update(Long id, ProductDTO dto);

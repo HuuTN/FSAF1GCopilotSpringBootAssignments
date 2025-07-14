@@ -6,11 +6,14 @@ import com.example.usermanagement.entity.OrderItem;
 import com.example.usermanagement.entity.Product;
 import com.example.usermanagement.entity.User;
 import com.example.usermanagement.exception.EntityNotFoundException;
+import com.example.usermanagement.exception.InsufficientStockException;
 import com.example.usermanagement.repository.OrderItemRepository;
 import com.example.usermanagement.repository.OrderRepository;
 import com.example.usermanagement.repository.ProductRepository;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.impl.OrderServiceImpl;
+import com.example.usermanagement.dto.OrderPostRequest;
+import com.example.usermanagement.dto.OrderItemRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -39,12 +42,20 @@ class OrderServiceTddTest {
 
     private User user;
     private Product product;
+    private OrderPostRequest request;
+    private OrderItemRequest itemRequest;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         user = User.builder().id(1L).name("Test User").email("test@example.com").build();
         product = Product.builder().id(1L).name("Test Product").price(BigDecimal.valueOf(100)).stock(10).build();
+        request = new OrderPostRequest();
+        request.setUserId(1L);
+        itemRequest = new OrderItemRequest();
+        itemRequest.setProductId(1L);
+        itemRequest.setQuantity(2);
+        request.setItems(java.util.List.of(itemRequest));
     }
 
     @Test
@@ -54,7 +65,7 @@ class OrderServiceTddTest {
         when(productRepository.save(any(Product.class))).thenAnswer(i -> i.getArgument(0));
         when(orderRepository.save(any(Order.class))).thenAnswer(i -> i.getArgument(0));
 
-        Order order = orderService.createOrder(1L, 1L, 2); // userId, productId, quantity
+        Order order = orderService.createOrder(request);
         assertNotNull(order);
         assertEquals(OrderStatus.CREATED, order.getStatus());
         assertEquals(8, product.getStock());
@@ -65,7 +76,7 @@ class OrderServiceTddTest {
         product.setStock(1);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-        assertThrows(EntityNotFoundException.class, () -> orderService.createOrder(1L, 1L, 2));
+        assertThrows(InsufficientStockException.class, () -> orderService.createOrder(request));
     }
 
     @Test

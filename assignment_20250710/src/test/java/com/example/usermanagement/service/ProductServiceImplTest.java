@@ -17,13 +17,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 class ProductServiceImplTest {
     @Mock
@@ -125,9 +130,9 @@ class ProductServiceImplTest {
     @Test
     void search_ReturnsPage() {
         Pageable pageable = PageRequest.of(0, 10);
-        when(productRepository.search(any(), any(), any())).thenReturn(new PageImpl<>(List.of(product)));
+        when(productRepository.search(any(), any(), any(), any())).thenReturn(new PageImpl<>(List.of(product)));
         when(productMapper.toDTO(any(Product.class))).thenReturn(productDTO);
-        Page<ProductDTO> page = productService.search("key", BigDecimal.TEN, pageable);
+        Page<ProductDTO> page = productService.search("key", BigDecimal.TEN,null, pageable);
         assertEquals(1, page.getTotalElements());
         assertEquals("Prod", page.getContent().get(0).getName());
     }

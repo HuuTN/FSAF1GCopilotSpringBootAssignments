@@ -6,11 +6,14 @@ import com.example.usermanagement.entity.OrderItem;
 import com.example.usermanagement.entity.Product;
 import com.example.usermanagement.entity.User;
 import com.example.usermanagement.exception.EntityNotFoundException;
+import com.example.usermanagement.exception.InsufficientStockException;
 import com.example.usermanagement.repository.OrderItemRepository;
 import com.example.usermanagement.repository.OrderRepository;
 import com.example.usermanagement.repository.ProductRepository;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.impl.OrderServiceImpl;
+import com.example.usermanagement.dto.OrderPostRequest;
+import com.example.usermanagement.dto.OrderItemRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -40,6 +43,8 @@ class OrderServiceImplTest {
     private Product product;
     private Order order;
     private OrderItem item;
+    private OrderPostRequest request;
+    private OrderItemRequest itemRequest;
 
     @BeforeEach
     void setUp() {
@@ -49,19 +54,25 @@ class OrderServiceImplTest {
         item = OrderItem.builder().id(3L).product(product).quantity(2).price(BigDecimal.TEN).build();
         order = Order.builder().id(4L).user(user).status(OrderStatus.PENDING).orderItems(List.of(item)).build();
         item.setOrder(order);
+        request = new OrderPostRequest();
+        request.setUserId(1L);
+        itemRequest = new OrderItemRequest();
+        itemRequest.setProductId(2L);
+        itemRequest.setQuantity(2);
+        request.setItems(java.util.List.of(itemRequest));
     }
 
     @Test
     void createOrder_UserNotFound_ThrowsException() {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> orderService.createOrder(1L, 2L, 2));
+        assertThrows(EntityNotFoundException.class, () -> orderService.createOrder(request));
     }
 
     @Test
     void createOrder_ProductNotFound_ThrowsException() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(productRepository.findById(2L)).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> orderService.createOrder(1L, 2L, 2));
+        assertThrows(EntityNotFoundException.class, () -> orderService.createOrder(request));
     }
 
     @Test
@@ -69,7 +80,7 @@ class OrderServiceImplTest {
         product.setStock(1);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(productRepository.findById(2L)).thenReturn(Optional.of(product));
-        assertThrows(EntityNotFoundException.class, () -> orderService.createOrder(1L, 2L, 2));
+        assertThrows(InsufficientStockException.class, () -> orderService.createOrder(request));
     }
 
     @Test
