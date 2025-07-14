@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.lab4.entity.Product;
+import com.example.lab4.model.entity.Product;
 
 // A Spring Data JPA repository for the Product entity.
 @Repository

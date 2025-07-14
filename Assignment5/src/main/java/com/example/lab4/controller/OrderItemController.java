@@ -1,7 +1,8 @@
 package com.example.lab4.controller;
 
-import com.example.lab4.dto.OrderItemDTO;
-import com.example.lab4.service.OrderItemService;
+import com.example.lab4.model.dto.OrderItemDTO;
+import com.example.lab4.service.serviceimpl.OrderItemServiceImpl;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "OrderItem", description = "Order Item management APIs")
 public class OrderItemController {
     @Autowired
-    private OrderItemService orderItemService;
+    private OrderItemServiceImpl orderItemService;
 
     @GetMapping
     @Operation(summary = "Get all order items (paginated)")

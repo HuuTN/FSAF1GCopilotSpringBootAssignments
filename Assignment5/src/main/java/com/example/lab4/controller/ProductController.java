@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.lab4.dto.ProductDTO;
-import com.example.lab4.service.ProductService;
+import com.example.lab4.model.dto.ProductDTO;
+import com.example.lab4.service.serviceimpl.ProductServiceImpl;
 
 import jakarta.validation.Valid;
 
@@ -17,7 +17,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/products")
 public class ProductController {
     @Autowired
-    private ProductService productService;
+    private ProductServiceImpl productService;
 
     @Operation(summary = "Get all products with pagination")
     @GetMapping

@@ -7,8 +7,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import com.example.lab4.entity.Category;
-import com.example.lab4.entity.Product;
+import com.example.lab4.model.entity.Category;
+import com.example.lab4.model.entity.Product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

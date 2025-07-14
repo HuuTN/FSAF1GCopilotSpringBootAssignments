@@ -9,14 +9,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.example.lab4.dto.OrderItemDTO;
-import com.example.lab4.entity.Order;
-import com.example.lab4.entity.OrderItem;
-import com.example.lab4.entity.Product;
+import com.example.lab4.model.dto.OrderItemDTO;
+import com.example.lab4.model.entity.Order;
+import com.example.lab4.model.entity.OrderItem;
+import com.example.lab4.model.entity.Product;
 import com.example.lab4.exception.ResourceNotFoundException;
 import com.example.lab4.repository.OrderItemRepository;
 import com.example.lab4.repository.OrderRepository;
 import com.example.lab4.repository.ProductRepository;
+import com.example.lab4.service.serviceimpl.OrderItemServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,7 @@ import static org.mockito.Mockito.*;
 
 class OrderItemServiceTest {
     @InjectMocks
-    private OrderItemService orderItemService;
+    private OrderItemServiceImpl orderItemService;
     @Mock
     private OrderItemRepository orderItemRepository;
     @Mock

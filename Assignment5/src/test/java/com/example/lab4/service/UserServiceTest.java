@@ -8,16 +8,17 @@ import org.mockito.MockitoAnnotations;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.data.domain.Pageable;
 
-import com.example.lab4.dto.UserDTO;
-import com.example.lab4.entity.User;
+import com.example.lab4.model.dto.UserDTO;
+import com.example.lab4.model.entity.User;
 import com.example.lab4.repository.UserRepository;
+import com.example.lab4.service.serviceimpl.UserServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
 
 class UserServiceTest {
     @InjectMocks
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Mock
     private UserRepository userRepository;

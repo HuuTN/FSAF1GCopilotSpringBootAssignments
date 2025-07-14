@@ -9,11 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.example.lab4.dto.OrderDTO;
-import com.example.lab4.entity.Order;
-import com.example.lab4.entity.User;
+import com.example.lab4.model.dto.OrderDTO;
+import com.example.lab4.model.entity.Order;
+import com.example.lab4.model.entity.User;
 import com.example.lab4.repository.OrderRepository;
 import com.example.lab4.repository.UserRepository;
+import com.example.lab4.service.serviceimpl.OrderServiceImpl;
 
 import java.util.List;
 import java.util.Optional;

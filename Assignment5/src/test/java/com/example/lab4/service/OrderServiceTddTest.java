@@ -6,18 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.lab4.BaseIntegrationTest;
-import com.example.lab4.constant.OrderStatus;
-import com.example.lab4.entity.*;
+import com.example.lab4.model.entity.*;
+import com.example.lab4.model.enums.OrderStatus;
 import com.example.lab4.repository.OrderRepository;
 import com.example.lab4.repository.ProductRepository;
 import com.example.lab4.repository.UserRepository;
+import com.example.lab4.service.serviceimpl.OrderServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
+
 @SpringBootTest
 @Transactional
-class OrderServiceTddTest extends BaseIntegrationTest {
+class OrderServiceTddTest {
     @Autowired
     private OrderServiceImpl orderService;
     @Autowired
@@ -47,6 +49,7 @@ class OrderServiceTddTest extends BaseIntegrationTest {
         testOrder = new Order();
         testOrder.setUser(testUser);
         testOrder.setStatus(OrderStatus.PENDING);
+        testOrder.setTotalAmount(new BigDecimal("199.98"));
         orderRepository.save(testOrder);
 
         orderItem = new OrderItem();

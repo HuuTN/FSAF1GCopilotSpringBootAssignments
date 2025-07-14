@@ -9,9 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.example.lab4.dto.CategoryDTO;
-import com.example.lab4.entity.Category;
+import com.example.lab4.model.dto.CategoryDTO;
+import com.example.lab4.model.entity.Category;
 import com.example.lab4.repository.CategoryRepository;
+import com.example.lab4.service.serviceimpl.CategoryServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 class CategoryServiceTest {
     @InjectMocks
-    private CategoryService categoryService;
+    private CategoryServiceImpl categoryService;
     @Mock
     private CategoryRepository categoryRepository;
 
@@ -32,7 +33,7 @@ class CategoryServiceTest {
 
     @Test
     void testCategoryServiceNotNull() {
-        CategoryService categoryService = new CategoryService();
+        CategoryServiceImpl categoryService = new CategoryServiceImpl();
         assertNotNull(categoryService);
     }
 

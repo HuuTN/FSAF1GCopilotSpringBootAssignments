@@ -8,8 +8,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import com.example.lab4.dto.ProductDTO;
-import com.example.lab4.service.ProductService;
+import com.example.lab4.model.dto.ProductDTO;
+import com.example.lab4.service.serviceimpl.ProductServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +25,7 @@ class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private ProductService productService;
+    private ProductServiceImpl productService;
     @Autowired
     private ObjectMapper objectMapper;
 

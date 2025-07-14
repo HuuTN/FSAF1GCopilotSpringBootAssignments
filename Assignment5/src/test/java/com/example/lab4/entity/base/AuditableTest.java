@@ -1,6 +1,9 @@
 package com.example.lab4.entity.base;
 
 import org.junit.jupiter.api.Test;
+
+import com.example.lab4.model.entity.base.Auditable;
+
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 

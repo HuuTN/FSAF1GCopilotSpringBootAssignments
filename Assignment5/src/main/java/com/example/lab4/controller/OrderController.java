@@ -1,7 +1,7 @@
 package com.example.lab4.controller;
 
-import com.example.lab4.dto.OrderDTO;
-import com.example.lab4.service.OrderServiceImpl;
+import com.example.lab4.model.dto.OrderDTO;
+import com.example.lab4.service.serviceimpl.OrderServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;

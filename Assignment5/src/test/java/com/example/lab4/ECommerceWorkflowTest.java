@@ -1,9 +1,9 @@
 package com.example.lab4;
 
-import com.example.lab4.dto.ProductDTO;
-import com.example.lab4.dto.UserDTO;
-import com.example.lab4.entity.Order;
-import com.example.lab4.constant.OrderStatus;
+import com.example.lab4.model.dto.ProductDTO;
+import com.example.lab4.model.dto.UserDTO;
+import com.example.lab4.model.entity.Order;
+import com.example.lab4.model.enums.OrderStatus;
 import com.example.lab4.repository.OrderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -72,7 +72,7 @@ class ECommerceWorkflowTest {
 
         // Check the order in the database
         List<Order> orders = orderRepository.findAll();
-        //assertThat(orders).hasSize(3);
+        //assertThat(orders).hasSize();
         assertThat(orders.get(0).getStatus()).isEqualTo(OrderStatus.PENDING);
     }
 }

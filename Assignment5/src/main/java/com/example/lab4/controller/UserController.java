@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.lab4.dto.UserDTO;
-import com.example.lab4.service.UserService;
+import com.example.lab4.model.dto.UserDTO;
+import com.example.lab4.service.serviceimpl.UserServiceImpl;
 
 import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/api/v1/users")
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Operation(summary = "Get all users with pagination")
     @ApiResponses({

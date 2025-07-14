@@ -6,10 +6,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.example.lab4.constant.OrderStatus;
-import com.example.lab4.entity.*;
+import com.example.lab4.model.entity.*;
+import com.example.lab4.model.enums.OrderStatus;
 import com.example.lab4.repository.OrderRepository;
 import com.example.lab4.repository.ProductRepository;
+import com.example.lab4.service.serviceimpl.OrderServiceImpl;
 
 import java.util.Optional;
 import java.util.List;

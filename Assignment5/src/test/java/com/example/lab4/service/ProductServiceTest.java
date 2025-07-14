@@ -9,11 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.example.lab4.dto.ProductDTO;
-import com.example.lab4.entity.Category;
-import com.example.lab4.entity.Product;
+import com.example.lab4.model.dto.ProductDTO;
+import com.example.lab4.model.entity.Category;
+import com.example.lab4.model.entity.Product;
 import com.example.lab4.repository.CategoryRepository;
 import com.example.lab4.repository.ProductRepository;
+import com.example.lab4.service.serviceimpl.ProductServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.*;
 
 class ProductServiceTest {
     @InjectMocks
-    private ProductService productService;
+    private ProductServiceImpl productService;
     @Mock
     private ProductRepository productRepository;
     @Mock
@@ -36,7 +37,7 @@ class ProductServiceTest {
 
     @Test
     void testProductServiceNotNull() {
-        ProductService productService = new ProductService();
+        ProductServiceImpl productService = new ProductServiceImpl();
         assertNotNull(productService);
     }
 

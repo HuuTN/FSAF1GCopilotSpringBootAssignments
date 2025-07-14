@@ -10,8 +10,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import com.example.lab4.dto.OrderDTO;
-import com.example.lab4.service.OrderServiceImpl;
+import com.example.lab4.model.dto.OrderDTO;
+import com.example.lab4.service.serviceimpl.OrderServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;

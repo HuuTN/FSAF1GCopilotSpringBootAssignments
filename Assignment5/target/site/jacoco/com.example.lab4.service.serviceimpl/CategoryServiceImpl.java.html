@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoryServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lab4-springboot</a> &gt; <a href="index.source.html" class="el_package">com.example.lab4.service.serviceimpl</a> &gt; <span class="el_source">CategoryServiceImpl.java</span></div><h1>CategoryServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.lab4.service.serviceimpl;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
+import com.example.lab4.model.dto.CategoryDTO;
+import com.example.lab4.model.entity.Category;
+import com.example.lab4.repository.CategoryRepository;
+import com.example.lab4.service.CategoryService;
+
+@Service
+<span class="fc" id="L18">public class CategoryServiceImpl implements CategoryService {</span>
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    private CategoryDTO toDTO(Category category) {
+<span class="fc" id="L23">        CategoryDTO dto = new CategoryDTO();</span>
+<span class="fc" id="L24">        dto.setId(category.getId());</span>
+<span class="fc" id="L25">        dto.setName(category.getName());</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        dto.setParentId(category.getParent() != null ? category.getParent().getId() : null);</span>
+<span class="fc" id="L27">        return dto;</span>
+    }
+
+    private Category toEntity(CategoryDTO dto) {
+<span class="fc" id="L31">        Category category = new Category();</span>
+<span class="fc" id="L32">        category.setId(dto.getId());</span>
+<span class="fc" id="L33">        category.setName(dto.getName());</span>
+        // parent sẽ được set ở controller nếu cần
+<span class="fc" id="L35">        return category;</span>
+    }
+
+    public Page&lt;CategoryDTO&gt; getAll(Pageable pageable) {
+<span class="fc" id="L39">        Page&lt;Category&gt; page = categoryRepository.findAll(pageable);</span>
+<span class="fc" id="L40">        return new PageImpl&lt;&gt;(</span>
+<span class="fc" id="L41">            page.getContent().stream().map(this::toDTO).collect(Collectors.toList()),</span>
+            pageable,
+<span class="fc" id="L43">            page.getTotalElements()</span>
+        );
+    }
+
+    public Optional&lt;CategoryDTO&gt; getById(Long id) {
+<span class="fc" id="L48">        return categoryRepository.findById(id).map(this::toDTO);</span>
+    }
+
+    public CategoryDTO create(CategoryDTO dto) {
+<span class="fc" id="L52">        Category category = toEntity(dto);</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (dto.getParentId() != null) {</span>
+<span class="fc" id="L54">            category.setParent(categoryRepository.findById(dto.getParentId()).orElse(null));</span>
+        }
+<span class="fc" id="L56">        Category saved = categoryRepository.save(category);</span>
+<span class="fc" id="L57">        return toDTO(saved);</span>
+    }
+
+    public Optional&lt;CategoryDTO&gt; update(Long id, CategoryDTO dto) {
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (!categoryRepository.existsById(id)) return Optional.empty();</span>
+<span class="fc" id="L62">        Category category = toEntity(dto);</span>
+<span class="fc" id="L63">        category.setId(id);</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (dto.getParentId() != null) {</span>
+<span class="fc" id="L65">            category.setParent(categoryRepository.findById(dto.getParentId()).orElse(null));</span>
+        }
+<span class="fc" id="L67">        Category saved = categoryRepository.save(category);</span>
+<span class="fc" id="L68">        return Optional.of(toDTO(saved));</span>
+    }
+
+    public boolean delete(Long id) {
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (!categoryRepository.existsById(id)) return false;</span>
+<span class="fc" id="L73">        categoryRepository.deleteById(id);</span>
+<span class="fc" id="L74">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.example.lab4.repository.ProductRepositoryTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.573 s -- in com.example.lab4.repository.ProductRepositoryTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.619 s -- in com.example.lab4.repository.ProductRepositoryTest

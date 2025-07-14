@@ -7,7 +7,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.lab4.service.OrderItemService;
+import com.example.lab4.service.serviceimpl.OrderItemServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +17,7 @@ class OrderItemControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private OrderItemService orderItemService;
+    private OrderItemServiceImpl orderItemService;
 
     @Test
     void testContextLoads() {

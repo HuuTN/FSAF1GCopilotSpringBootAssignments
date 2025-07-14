@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.lab4.dto.CategoryDTO;
-import com.example.lab4.service.CategoryService;
+import com.example.lab4.model.dto.CategoryDTO;
+import com.example.lab4.service.serviceimpl.CategoryServiceImpl;
 
 import jakarta.validation.Valid;
 
@@ -17,7 +17,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/categories")
 public class CategoryController {
     @Autowired
-    private CategoryService categoryService;
+    private CategoryServiceImpl categoryService;
 
     @Operation(summary = "Get all categories with pagination")
     @GetMapping

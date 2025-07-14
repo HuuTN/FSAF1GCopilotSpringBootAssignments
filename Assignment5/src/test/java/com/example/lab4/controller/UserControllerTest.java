@@ -10,8 +10,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import java.util.Optional;
 
-import com.example.lab4.dto.UserDTO;
-import com.example.lab4.service.UserService;
+import com.example.lab4.model.dto.UserDTO;
+import com.example.lab4.service.serviceimpl.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.any;
@@ -24,7 +24,7 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private UserService userService;
+    private UserServiceImpl userService;
     @Autowired
     private ObjectMapper objectMapper;
 

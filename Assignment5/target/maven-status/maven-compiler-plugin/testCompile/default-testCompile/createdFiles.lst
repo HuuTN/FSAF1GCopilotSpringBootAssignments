@@ -10,7 +10,6 @@ com\example\lab4\service\UserServiceTest.class
 com\example\lab4\entity\base\AuditableTest.class
 com\example\lab4\service\CategoryServiceTest.class
 com\example\lab4\service\OrderServiceTddTest.class
-com\example\lab4\BaseIntegrationTest.class
 com\example\lab4\controller\UserControllerTest.class
 com\example\lab4\service\ProductServiceTest.class
 com\example\lab4\controller\OrderControllerTest.class
