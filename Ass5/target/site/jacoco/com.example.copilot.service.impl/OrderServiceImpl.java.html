@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lab3-springboot</a> &gt; <a href="index.source.html" class="el_package">com.example.copilot.service.impl</a> &gt; <span class="el_source">OrderServiceImpl.java</span></div><h1>OrderServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.copilot.service.impl;
+
+import com.example.copilot.core.dto.OrderDTO;
+import com.example.copilot.core.dto.CreateOrderRequestDTO;
+import com.example.copilot.core.dto.OrderItemDTO;
+import com.example.copilot.core.entity.Order;
+import com.example.copilot.core.entity.OrderItem;
+import com.example.copilot.core.entity.Product;
+import com.example.copilot.core.entity.User;
+import com.example.copilot.core.enums.OrderStatus;
+import com.example.copilot.core.repository.OrderItemRepository;
+import com.example.copilot.core.repository.OrderRepository;
+import com.example.copilot.core.repository.ProductRepository;
+import com.example.copilot.core.repository.UserRepository;
+import com.example.copilot.exception.InsufficientStockException;
+import com.example.copilot.exception.ResourceNotFoundException;
+import com.example.copilot.service.OrderService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Service
+<span class="fc" id="L28">public class OrderServiceImpl implements OrderService {</span>
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    @Transactional
+    public OrderDTO placeOrder(CreateOrderRequestDTO request) {
+<span class="fc" id="L41">        User user = userRepository.findById(request.getUserId())</span>
+<span class="pc" id="L42">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found&quot;));</span>
+<span class="fc" id="L43">        Order order = new Order();</span>
+<span class="fc" id="L44">        order.setOrderDate(LocalDateTime.now());</span>
+<span class="fc" id="L45">        order.setStatus(OrderStatus.PENDING);</span>
+<span class="fc" id="L46">        order.setUser(user);</span>
+<span class="fc" id="L47">        Set&lt;OrderItem&gt; orderItems = new HashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for (CreateOrderRequestDTO.OrderItemRequest itemReq : request.getItems()) {</span>
+<span class="fc" id="L49">            Product product = productRepository.findById(itemReq.getProductId())</span>
+<span class="pc" id="L50">                    .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Product not found&quot;));</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (product.getStockQuantity() &lt; itemReq.getQuantity()) {</span>
+<span class="fc" id="L52">                throw new InsufficientStockException(&quot;Not enough stock for product: &quot; + product.getName());</span>
+            }
+<span class="fc" id="L54">            product.setStockQuantity(product.getStockQuantity() - itemReq.getQuantity());</span>
+<span class="fc" id="L55">            productRepository.save(product);</span>
+<span class="fc" id="L56">            OrderItem orderItem = new OrderItem();</span>
+<span class="fc" id="L57">            orderItem.setOrder(order);</span>
+<span class="fc" id="L58">            orderItem.setProduct(product);</span>
+<span class="fc" id="L59">            orderItem.setQuantity(itemReq.getQuantity());</span>
+<span class="fc" id="L60">            orderItem.setPrice(product.getPrice());</span>
+<span class="fc" id="L61">            orderItems.add(orderItem);</span>
+<span class="fc" id="L62">        }</span>
+<span class="fc" id="L63">        order.setOrderItems(orderItems);</span>
+<span class="fc" id="L64">        Order savedOrder = orderRepository.save(order);</span>
+<span class="fc" id="L65">        orderItemRepository.saveAll(orderItems);</span>
+<span class="fc" id="L66">        return toDTO(savedOrder);</span>
+    }
+
+    @Override
+    public Optional&lt;OrderDTO&gt; getById(Long id) {
+<span class="fc" id="L71">        return orderRepository.findById(id).map(this::toDTO);</span>
+    }
+
+    @Override
+    public List&lt;OrderDTO&gt; getAll() {
+<span class="fc" id="L76">        return orderRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());</span>
+    }
+
+    @Override
+    public List&lt;OrderDTO&gt; getByUserId(Long userId) {
+<span class="fc" id="L81">        return orderRepository.findAll().stream()</span>
+<span class="pc bpc" id="L82" title="2 of 4 branches missed.">                .filter(o -&gt; o.getUser() != null &amp;&amp; o.getUser().getId().equals(userId))</span>
+<span class="fc" id="L83">                .map(this::toDTO)</span>
+<span class="fc" id="L84">                .collect(Collectors.toList());</span>
+    }
+
+    @Override
+    public boolean delete(Long id) {
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (!orderRepository.existsById(id)) return false;</span>
+<span class="fc" id="L90">        orderRepository.deleteById(id);</span>
+<span class="fc" id="L91">        return true;</span>
+    }
+
+    private OrderDTO toDTO(Order order) {
+<span class="fc" id="L95">        OrderDTO dto = new OrderDTO();</span>
+<span class="fc" id="L96">        dto.setId(order.getId());</span>
+<span class="fc" id="L97">        dto.setOrderDate(order.getOrderDate());</span>
+<span class="fc" id="L98">        dto.setStatus(order.getStatus().name());</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        dto.setUserId(order.getUser() != null ? order.getUser().getId() : null);</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (order.getOrderItems() != null) {</span>
+<span class="fc" id="L101">            Set&lt;OrderItemDTO&gt; items = order.getOrderItems().stream().map(this::toItemDTO).collect(Collectors.toSet());</span>
+<span class="fc" id="L102">            dto.setOrderItems(items);</span>
+        }
+<span class="fc" id="L104">        return dto;</span>
+    }
+    private OrderItemDTO toItemDTO(OrderItem item) {
+<span class="fc" id="L107">        OrderItemDTO dto = new OrderItemDTO();</span>
+<span class="fc" id="L108">        dto.setId(item.getId());</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        dto.setProductId(item.getProduct() != null ? item.getProduct().getId() : null);</span>
+<span class="fc" id="L110">        dto.setQuantity(item.getQuantity());</span>
+<span class="fc" id="L111">        dto.setPrice(item.getPrice());</span>
+<span class="fc" id="L112">        return dto;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

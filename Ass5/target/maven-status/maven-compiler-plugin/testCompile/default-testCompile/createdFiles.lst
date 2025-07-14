@@ -1,0 +1,8 @@
+com\example\copilot\service\repository\ProductRepositoryTest.class
+com\example\copilot\api\controller\UserControllerTest.class
+com\example\copilot\service\OrderServiceUnitTest.class
+com\example\copilot\api\controller\CategoryControllerTest.class
+com\example\copilot\api\controller\OrderControllerTest.class
+com\example\copilot\ECommerceWorkflowTest.class
+com\example\copilot\api\ApiIntegrationTest.class
+com\example\copilot\api\controller\ProductControllerTest.class

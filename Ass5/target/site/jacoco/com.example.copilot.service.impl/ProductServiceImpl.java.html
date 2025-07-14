@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lab3-springboot</a> &gt; <a href="index.source.html" class="el_package">com.example.copilot.service.impl</a> &gt; <span class="el_source">ProductServiceImpl.java</span></div><h1>ProductServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.copilot.service.impl;
+
+import com.example.copilot.core.dto.ProductDTO;
+import com.example.copilot.core.entity.Product;
+import com.example.copilot.core.repository.CategoryRepository;
+import com.example.copilot.core.repository.ProductRepository;
+import com.example.copilot.exception.ResourceNotFoundException;
+import com.example.copilot.service.ProductService;
+import com.example.copilot.core.entity.Category;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+<span class="fc" id="L22">public class ProductServiceImpl implements ProductService {</span>
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    private ProductDTO toDTO(Product product) {
+<span class="fc" id="L29">        ProductDTO dto = new ProductDTO();</span>
+<span class="fc" id="L30">        dto.setId(product.getId());</span>
+<span class="fc" id="L31">        dto.setName(product.getName());</span>
+<span class="fc" id="L32">        dto.setDescription(product.getDescription());</span>
+<span class="fc" id="L33">        dto.setPrice(product.getPrice());</span>
+<span class="fc" id="L34">        dto.setStockQuantity(product.getStockQuantity());</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        dto.setCategoryId(product.getCategory() != null ? product.getCategory().getId() : null);</span>
+<span class="fc" id="L36">        return dto;</span>
+    }
+
+    private Product toEntity(ProductDTO dto, Product existing) {
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        Product product = existing != null ? existing : new Product();</span>
+<span class="fc" id="L41">        product.setId(dto.getId());</span>
+<span class="fc" id="L42">        product.setName(dto.getName());</span>
+<span class="fc" id="L43">        product.setDescription(dto.getDescription());</span>
+<span class="fc" id="L44">        product.setPrice(dto.getPrice());</span>
+<span class="fc" id="L45">        product.setStockQuantity(dto.getStockQuantity());</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (dto.getCategoryId() != null) {</span>
+<span class="fc" id="L47">            Category category = categoryRepository.findById(dto.getCategoryId()).orElse(null);</span>
+<span class="fc" id="L48">            product.setCategory(category);</span>
+        }
+        // Không set orderItems để tránh lỗi orphan
+<span class="fc" id="L51">        return product;</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page&lt;ProductDTO&gt; getAll(Pageable pageable) {
+<span class="nc" id="L57">        Page&lt;Product&gt; page = productRepository.findAll(pageable);</span>
+<span class="nc" id="L58">        return new PageImpl&lt;&gt;(</span>
+<span class="nc" id="L59">            page.getContent().stream().map(this::toDTO).collect(Collectors.toList()),</span>
+            pageable,
+<span class="nc" id="L61">            page.getTotalElements()</span>
+        );
+    }
+
+    @Override
+    public Optional&lt;ProductDTO&gt; getById(Long id) {
+<span class="fc" id="L67">        return productRepository.findById(id).map(this::toDTO);</span>
+    }
+
+    @Override
+    public ProductDTO create(ProductDTO dto) {
+<span class="fc" id="L72">        Product product = toEntity(dto, null);</span>
+<span class="fc" id="L73">        Product saved = productRepository.save(product);</span>
+<span class="fc" id="L74">        return toDTO(saved);</span>
+    }
+
+    @Override
+    public Optional&lt;ProductDTO&gt; update(Long id, ProductDTO dto) {
+<span class="fc" id="L79">        Product existing = productRepository.findById(id).orElse(null);</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (existing == null) return Optional.empty();</span>
+<span class="fc" id="L81">        Product product = toEntity(dto, existing);</span>
+<span class="fc" id="L82">        product.setId(id);</span>
+<span class="fc" id="L83">        Product saved = productRepository.save(product);</span>
+<span class="fc" id="L84">        return Optional.of(toDTO(saved));</span>
+    }
+
+    @Override
+    public boolean delete(Long id) {
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (!productRepository.existsById(id)) return false;</span>
+<span class="fc" id="L90">        productRepository.deleteById(id);</span>
+<span class="fc" id="L91">        return true;</span>
+    }
+
+    @Override
+    public Page&lt;ProductDTO&gt; search(String keyword, Long categoryId, Double minPrice, Double maxPrice, Pageable pageable) {
+<span class="fc" id="L96">        Page&lt;Product&gt; page = productRepository.search(keyword, categoryId, minPrice, maxPrice, pageable);</span>
+<span class="fc" id="L97">        return new PageImpl&lt;&gt;(</span>
+<span class="fc" id="L98">            page.getContent().stream().map(this::toDTO).collect(Collectors.toList()),</span>
+            pageable,
+<span class="fc" id="L100">            page.getTotalElements()</span>
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
