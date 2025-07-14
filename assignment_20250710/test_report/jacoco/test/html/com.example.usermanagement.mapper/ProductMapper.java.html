@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">user-management</a> &gt; <a href="index.source.html" class="el_package">com.example.usermanagement.mapper</a> &gt; <span class="el_source">ProductMapper.java</span></div><h1>ProductMapper.java</h1><pre class="source lang-java linenums">package com.example.usermanagement.mapper;
+
+import com.example.usermanagement.dto.ProductDTO;
+import com.example.usermanagement.entity.Category;
+import com.example.usermanagement.entity.Product;
+import org.springframework.stereotype.Component;
+
+@Component
+<span class="fc" id="L9">public class ProductMapper {</span>
+    public ProductDTO toDTO(Product product) {
+<span class="pc bpc" id="L11" title="1 of 2 branches missed.">        if (product == null) return null;</span>
+<span class="fc" id="L12">        return ProductDTO.builder()</span>
+<span class="fc" id="L13">                .id(product.getId())</span>
+<span class="fc" id="L14">                .name(product.getName())</span>
+<span class="fc" id="L15">                .price(product.getPrice())</span>
+<span class="fc" id="L16">                .stock(product.getStock())</span>
+<span class="pc bpc" id="L17" title="1 of 2 branches missed.">                .categoryId(product.getCategory() != null ? product.getCategory().getId() : null)</span>
+<span class="pc bpc" id="L18" title="1 of 2 branches missed.">                .categoryName(product.getCategory() != null ? product.getCategory().getName() : null)</span>
+<span class="fc" id="L19">                .build();</span>
+    }
+
+    public Product toEntity(ProductDTO dto, Category category) {
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">        if (dto == null) return null;</span>
+<span class="fc" id="L24">        return Product.builder()</span>
+<span class="fc" id="L25">                .id(dto.getId())</span>
+<span class="fc" id="L26">                .name(dto.getName())</span>
+<span class="fc" id="L27">                .price(dto.getPrice())</span>
+<span class="fc" id="L28">                .stock(dto.getStock())</span>
+<span class="fc" id="L29">                .category(category)</span>
+<span class="fc" id="L30">                .build();</span>
+    }
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

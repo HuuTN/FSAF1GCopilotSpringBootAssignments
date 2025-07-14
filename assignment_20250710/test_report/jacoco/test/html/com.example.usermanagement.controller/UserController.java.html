@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">user-management</a> &gt; <a href="index.source.html" class="el_package">com.example.usermanagement.controller</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package com.example.usermanagement.controller;
+
+import com.example.usermanagement.dto.UserDTO;
+import com.example.usermanagement.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping(&quot;/api/v1/users&quot;)
+@Tag(name = &quot;User API&quot;, description = &quot;CRUD API for User management&quot;)
+<span class="fc" id="L19">public class UserController {</span>
+    @Autowired
+    private UserService userService;
+
+    @GetMapping
+    @Operation(summary = &quot;Get all users with paging&quot;)
+    public ResponseEntity&lt;Page&lt;UserDTO&gt;&gt; getAllUsers(@PageableDefault(size = 10) Pageable pageable) {
+<span class="fc" id="L26">        return ResponseEntity.ok(userService.getAllUsers(pageable));</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    @Operation(summary = &quot;Get user by id&quot;)
+    public ResponseEntity&lt;UserDTO&gt; getUserById(@PathVariable Long id) {
+<span class="fc" id="L32">        return ResponseEntity.ok(userService.getUserById(id));</span>
+    }
+
+    @PostMapping
+    @Operation(summary = &quot;Create new user&quot;)
+    public ResponseEntity&lt;UserDTO&gt; createUser(@Valid @RequestBody UserDTO userDTO) {
+<span class="fc" id="L38">        return new ResponseEntity&lt;&gt;(userService.createUser(userDTO), HttpStatus.CREATED);</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    @Operation(summary = &quot;Update user by id&quot;)
+    public ResponseEntity&lt;UserDTO&gt; updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO) {
+<span class="fc" id="L44">        return ResponseEntity.ok(userService.updateUser(id, userDTO));</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    @Operation(summary = &quot;Delete user by id&quot;)
+    public ResponseEntity&lt;Void&gt; deleteUser(@PathVariable Long id) {
+<span class="fc" id="L50">        userService.deleteUser(id);</span>
+<span class="fc" id="L51">        return ResponseEntity.noContent().build();</span>
+    }
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
