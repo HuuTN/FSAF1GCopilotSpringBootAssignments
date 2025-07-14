@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lab3-springboot</a> &gt; <a href="index.source.html" class="el_package">com.example.copilot.core.dto</a> &gt; <span class="el_source">ProductDTO.java</span></div><h1>ProductDTO.java</h1><pre class="source lang-java linenums">package com.example.copilot.core.dto;
+
+import jakarta.validation.constraints.*;
+
+<span class="fc" id="L5">public class ProductDTO {</span>
+    private Long id;
+    @NotBlank
+    private String name;
+    private String description;
+    @NotNull
+    @DecimalMin(&quot;0.0&quot;)
+    private Double price;
+    @NotNull
+    @Min(0)
+    private Integer stockQuantity;
+    private Long categoryId;
+
+    public Long getId() {
+<span class="fc" id="L19">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L23">        this.id = id;</span>
+<span class="fc" id="L24">    }</span>
+
+    public String getName() {
+<span class="fc" id="L27">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="fc" id="L31">        this.name = name;</span>
+<span class="fc" id="L32">    }</span>
+
+    public String getDescription() {
+<span class="fc" id="L35">        return description;</span>
+    }
+
+    public void setDescription(String description) {
+<span class="fc" id="L39">        this.description = description;</span>
+<span class="fc" id="L40">    }</span>
+
+    public Double getPrice() {
+<span class="fc" id="L43">        return price;</span>
+    }
+
+    public void setPrice(Double price) {
+<span class="fc" id="L47">        this.price = price;</span>
+<span class="fc" id="L48">    }</span>
+
+    public Integer getStockQuantity() {
+<span class="fc" id="L51">        return stockQuantity;</span>
+    }
+
+    public void setStockQuantity(Integer stockQuantity) {
+<span class="fc" id="L55">        this.stockQuantity = stockQuantity;</span>
+<span class="fc" id="L56">    }</span>
+
+    public Long getCategoryId() {
+<span class="fc" id="L59">        return categoryId;</span>
+    }
+
+    public void setCategoryId(Long categoryId) {
+<span class="fc" id="L63">        this.categoryId = categoryId;</span>
+<span class="fc" id="L64">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

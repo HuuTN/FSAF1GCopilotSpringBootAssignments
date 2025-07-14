@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CopilotApplication",
+            "request": "launch",
+            "mainClass": "com.example.copilot.CopilotApplication",
+            "projectName": "lab3-springboot"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-Lab3SpringbootApplication<lab3-springboot>",
             "request": "launch",
             "cwd": "${workspaceFolder}",

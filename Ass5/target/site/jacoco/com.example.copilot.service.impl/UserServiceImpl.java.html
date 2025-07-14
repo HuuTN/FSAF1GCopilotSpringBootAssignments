@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lab3-springboot</a> &gt; <a href="index.source.html" class="el_package">com.example.copilot.service.impl</a> &gt; <span class="el_source">UserServiceImpl.java</span></div><h1>UserServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.copilot.service.impl;
+
+import com.example.copilot.core.dto.UserDTO;
+import com.example.copilot.core.entity.User;
+import com.example.copilot.core.repository.UserRepository;
+import com.example.copilot.service.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+<span class="fc" id="L16">public class UserServiceImpl implements UserService {</span>
+    @Autowired
+    private UserRepository userRepository;
+
+    private UserDTO toDTO(User user) {
+<span class="fc" id="L21">        UserDTO dto = new UserDTO();</span>
+<span class="fc" id="L22">        dto.setId(user.getId());</span>
+<span class="fc" id="L23">        dto.setName(user.getName());</span>
+<span class="fc" id="L24">        dto.setEmail(user.getEmail());</span>
+<span class="fc" id="L25">        dto.setPassword(user.getPassword());</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        dto.setRole(user.getRole() != null ? user.getRole().name() : null);</span>
+<span class="fc" id="L27">        return dto;</span>
+    }
+
+    private User toEntity(UserDTO dto) {
+<span class="fc" id="L31">        User user = new User();</span>
+<span class="fc" id="L32">        user.setId(dto.getId());</span>
+<span class="fc" id="L33">        user.setName(dto.getName());</span>
+<span class="fc" id="L34">        user.setEmail(dto.getEmail());</span>
+<span class="fc" id="L35">        user.setPassword(dto.getPassword());</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        if (dto.getRole() != null) {</span>
+<span class="fc" id="L37">            user.setRole(com.example.copilot.core.enums.UserRole.valueOf(dto.getRole()));</span>
+        } else {
+<span class="nc" id="L39">            user.setRole(null);</span>
+        }
+<span class="fc" id="L41">        return user;</span>
+    }
+
+    @Override
+    public UserDTO create(UserDTO dto) {
+<span class="fc" id="L46">        User user = toEntity(dto);</span>
+<span class="fc" id="L47">        User saved = userRepository.save(user);</span>
+<span class="fc" id="L48">        return toDTO(saved);</span>
+    }
+
+    @Override
+    public Optional&lt;UserDTO&gt; update(Long id, UserDTO dto) {
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (!userRepository.existsById(id)) return Optional.empty();</span>
+<span class="fc" id="L54">        User user = toEntity(dto);</span>
+<span class="fc" id="L55">        user.setId(id);</span>
+<span class="fc" id="L56">        User saved = userRepository.save(user);</span>
+<span class="fc" id="L57">        return Optional.of(toDTO(saved));</span>
+    }
+
+    @Override
+    public boolean delete(Long id) {
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (!userRepository.existsById(id)) return false;</span>
+<span class="fc" id="L63">        userRepository.deleteById(id);</span>
+<span class="fc" id="L64">        return true;</span>
+    }
+
+    @Override
+    public Optional&lt;UserDTO&gt; getById(Long id) {
+<span class="fc" id="L69">        return userRepository.findById(id).map(this::toDTO);</span>
+    }
+
+    @Override
+    public List&lt;UserDTO&gt; getAll() {
+<span class="fc" id="L74">        return userRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,5 @@
+# Created at 2025-07-14T21:32:40.394
+Boot Manifest-JAR contains absolute paths in classpath 'D:\FSAF1GCopilotSpringBootAssignments\FSAF1GCopilotSpringBootAssignments\Ass5\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

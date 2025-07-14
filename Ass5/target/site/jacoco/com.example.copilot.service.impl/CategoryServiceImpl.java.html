@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoryServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lab3-springboot</a> &gt; <a href="index.source.html" class="el_package">com.example.copilot.service.impl</a> &gt; <span class="el_source">CategoryServiceImpl.java</span></div><h1>CategoryServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.copilot.service.impl;
+
+import com.example.copilot.core.dto.CategoryDTO;
+import com.example.copilot.core.entity.Category;
+import com.example.copilot.core.repository.CategoryRepository;
+import com.example.copilot.service.CategoryService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Service
+<span class="fc" id="L17">public class CategoryServiceImpl implements CategoryService {</span>
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    private CategoryDTO toDTO(Category category) {
+<span class="fc" id="L22">        CategoryDTO dto = new CategoryDTO();</span>
+<span class="fc" id="L23">        dto.setId(category.getId());</span>
+<span class="fc" id="L24">        dto.setName(category.getName());</span>
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">        dto.setParentId(category.getParent() != null ? category.getParent().getId() : null);</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (category.getChildren() != null) {</span>
+<span class="fc" id="L27">            Set&lt;Long&gt; childrenIds = category.getChildren().stream().map(Category::getId).collect(Collectors.toSet());</span>
+<span class="fc" id="L28">            dto.setChildrenIds(childrenIds);</span>
+        }
+<span class="fc" id="L30">        return dto;</span>
+    }
+
+    private Category toEntity(CategoryDTO dto) {
+<span class="fc" id="L34">        Category category = new Category();</span>
+<span class="fc" id="L35">        category.setId(dto.getId());</span>
+<span class="fc" id="L36">        category.setName(dto.getName());</span>
+        // parent và children sẽ được xử lý ở controller/service nếu cần
+<span class="fc" id="L38">        return category;</span>
+    }
+
+    @Override
+    public CategoryDTO create(CategoryDTO dto) {
+<span class="fc" id="L43">        Category category = toEntity(dto);</span>
+<span class="fc" id="L44">        Category saved = categoryRepository.save(category);</span>
+<span class="fc" id="L45">        return toDTO(saved);</span>
+    }
+
+    @Override
+    public Optional&lt;CategoryDTO&gt; update(Long id, CategoryDTO dto) {
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (!categoryRepository.existsById(id)) return Optional.empty();</span>
+<span class="fc" id="L51">        Category category = toEntity(dto);</span>
+<span class="fc" id="L52">        category.setId(id);</span>
+<span class="fc" id="L53">        Category saved = categoryRepository.save(category);</span>
+<span class="fc" id="L54">        return Optional.of(toDTO(saved));</span>
+    }
+
+    @Override
+    public boolean delete(Long id) {
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (!categoryRepository.existsById(id)) return false;</span>
+<span class="fc" id="L60">        categoryRepository.deleteById(id);</span>
+<span class="fc" id="L61">        return true;</span>
+    }
+
+    @Override
+    public Optional&lt;CategoryDTO&gt; getById(Long id) {
+<span class="fc" id="L66">        return categoryRepository.findById(id).map(this::toDTO);</span>
+    }
+
+    @Override
+    public List&lt;CategoryDTO&gt; getAll() {
+<span class="fc" id="L71">        return categoryRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
