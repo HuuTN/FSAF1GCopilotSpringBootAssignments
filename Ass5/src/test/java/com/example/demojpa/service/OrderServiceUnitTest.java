@@ -24,7 +24,7 @@ class OrderServiceUnitTest {
     @Mock private OrderRepository orderRepository;
     @Mock private ProductRepository productRepository;
     @Mock private UserRepository userRepository;
-    @InjectMocks private OrderService orderService;
+    @InjectMocks private com.example.demojpa.service.impl.OrderServiceImpl orderService;
 
     @Test
     void testPlaceOrder_whenStockIsInsufficient_thenThrowsException() {

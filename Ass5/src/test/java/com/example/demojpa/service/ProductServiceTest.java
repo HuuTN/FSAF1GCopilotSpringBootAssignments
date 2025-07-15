@@ -16,7 +16,7 @@ class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
     @InjectMocks
-    private ProductService productService;
+    private com.example.demojpa.service.impl.ProductServiceImpl productService;
 
     @BeforeEach
     void setUp() {

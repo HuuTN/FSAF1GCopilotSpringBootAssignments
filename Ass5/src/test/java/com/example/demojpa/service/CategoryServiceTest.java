@@ -23,7 +23,7 @@ class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
     @InjectMocks
-    private CategoryService categoryService;
+    private com.example.demojpa.service.impl.CategoryServiceImpl categoryService;
 
     @BeforeEach
     void setUp() {

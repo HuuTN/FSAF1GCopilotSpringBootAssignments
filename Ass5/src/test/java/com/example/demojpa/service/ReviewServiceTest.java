@@ -26,7 +26,7 @@ class ReviewServiceTest {
     @Mock
     private UserRepository userRepository;
     @InjectMocks
-    private ReviewService reviewService;
+    private com.example.demojpa.service.impl.ReviewServiceImpl reviewService;
 
     @BeforeEach
     void setUp() {

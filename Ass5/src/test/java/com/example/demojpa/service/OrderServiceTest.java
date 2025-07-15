@@ -28,7 +28,7 @@ class OrderServiceTest {
     @Mock
     private UserRepository userRepository;
     @InjectMocks
-    private OrderService orderService;
+    private com.example.demojpa.service.impl.OrderServiceImpl orderService;
 
     @BeforeEach
     void setUp() {

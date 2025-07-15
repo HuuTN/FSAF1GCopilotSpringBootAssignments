@@ -15,7 +15,7 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
     @InjectMocks
-    private UserService userService;
+    private com.example.demojpa.service.impl.UserServiceImpl userService;
 
     @BeforeEach
     void setUp() {
