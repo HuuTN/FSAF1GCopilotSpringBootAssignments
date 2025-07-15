@@ -1,33 +1,36 @@
 package com.example.demo.dto;
 
-import java.util.List;
-
 import com.example.demo.entity.Category;
 
 public class CategoryDTO {
+
     private Long id;
     private String name;
-    private List<CategoryDTO> children;
 
-    public CategoryDTO(Long id, String name, List<CategoryDTO> children) {
+    public CategoryDTO(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.children = children;
     }
 
     public static CategoryDTO fromEntity(Category category) {
-        List<CategoryDTO> childDTOs = null;
-        if (category.getChildren() != null) {
-            childDTOs = category.getChildren().stream()
-                .map(CategoryDTO::fromEntity)
-                .toList();
-        }
-        return new CategoryDTO(category.getId(), category.getName(), childDTOs);
+        return new CategoryDTO(category.getId(), category.getName());
     }
 
-    // Getters
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public List<CategoryDTO> getChildren() { return children; }
-}
+    // toEntity method to convert DTO to Entity
+    public Category fromEntity() {
+        Category category = new Category();
+        category.setId(this.id);
+        category.setName(this.name);
+        return category;
+    }
 
+    // Getters & Setters
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
+}

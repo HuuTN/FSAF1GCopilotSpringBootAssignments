@@ -1,44 +1,62 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.CategoryDTO;
-import com.example.demo.entity.Category;
-import com.example.demo.repository.CategoryRepository;
 
-import jakarta.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.example.demo.entity.Category;
+import com.example.demo.service.CategoryService;
+
+
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api/category")
 public class CategoryController {
+
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
-
-    @Transactional
+    @PostMapping
+    public ResponseEntity<Void> addCategory(@RequestBody Category category) {
+        categoryService.addCategory(category);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    
     @GetMapping
-    public List<CategoryDTO> getAllCategories() {
-        List<Category> categories = categoryRepository.findAll();
-        return categories.stream()
-                .map(CategoryDTO::fromEntity)
-                .toList();
+    public ResponseEntity<List<Category>> getAllCategories() {
+        List<Category> categories = categoryService.getAllCategories();
+        return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/{id}")
-    public Category getById(@PathVariable Long id) { return categoryRepository.findById(id).orElse(null); }
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
+        Category category = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(category);
+    }
 
-    @PostMapping
-    public Category create(@RequestBody Category category) { return categoryRepository.save(category); }
-
+    
     @PutMapping("/{id}")
-    public Category update(@PathVariable Long id, @RequestBody Category category) {
+    public ResponseEntity<Void> updateCategory(@PathVariable Long id, @RequestBody Category category) {
         category.setId(id);
-        return categoryRepository.save(category);
+        try {
+            categoryService.updateCategory(category);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) { categoryRepository.deleteById(id); }
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        try {
+            categoryService.deleteCategory(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }

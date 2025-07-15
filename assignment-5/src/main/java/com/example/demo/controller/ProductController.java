@@ -1,32 +1,63 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Product;
-import com.example.demo.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.example.demo.entity.Product;
+import com.example.demo.service.ProductService;
+
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController {
+
     @Autowired
-    private ProductRepository productRepository;
-
-    @GetMapping
-    public List<Product> getAll() { return productRepository.findAll(); }
-
-    @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id) { return productRepository.findById(id).orElse(null); }
+    private ProductService productService;
 
     @PostMapping
-    public Product create(@RequestBody Product product) { return productRepository.save(product); }
+    public ResponseEntity<Void> addProduct(@RequestBody Product product) {
+        productService.addProduct(product);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Product>> getAllProducts(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        List<Product> products = productService.getAllProducts(name, category, page, size);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+        Product product = productService.getProductById(id);
+        return product != null ? ResponseEntity.ok(product) : ResponseEntity.notFound().build();
+    }
 
     @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
+    public ResponseEntity<Void> updateProduct(@PathVariable Long id, @RequestBody Product product) {
         product.setId(id);
-        return productRepository.save(product);
+        try {
+            productService.updateProduct(product);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) { productRepository.deleteById(id); }
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        try {
+            productService.deleteProduct(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

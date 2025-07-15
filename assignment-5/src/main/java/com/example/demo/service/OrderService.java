@@ -1,14 +1,14 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Order;
+import java.util.List;
+
+import com.example.demo.dto.CreateOrderRequestDTO;
+import com.example.demo.dto.OrderDTO;
 
 public interface OrderService {
+    OrderDTO placeOrder(CreateOrderRequestDTO request);
 
-    Order getOrderById(Long orderId);
+    List<OrderDTO> getAllOrders();
 
-    void cancelOrder(Long orderId);
-
-    Order createdOrder(Order order);
-
-    // Other methods related to order management
+    List<OrderDTO> getUserOrders(Long userId);
 }
