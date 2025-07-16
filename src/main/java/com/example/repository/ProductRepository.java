@@ -38,4 +38,17 @@ public interface ProductRepository extends BaseRepository<Product, Long> {
     
     @Query("SELECT AVG(r.rating) FROM Product p JOIN p.reviews r WHERE p.id = :productId")
     Double getAverageRating(@Param("productId") Long productId);
+    
+    // Create a JPQL query to search for products by keyword, categoryId, minPrice, and maxPrice with pagination
+    @Query("SELECT p FROM Product p WHERE " +
+           "(:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
+           "(:categoryId IS NULL OR p.category.id = :categoryId) AND " +
+           "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
+           "(:maxPrice IS NULL OR p.price <= :maxPrice) AND " +
+           "p.active = true")
+    Page<Product> advancedSearch(@Param("keyword") String keyword,
+                                @Param("categoryId") Long categoryId,
+                                @Param("minPrice") Double minPrice,
+                                @Param("maxPrice") Double maxPrice,
+                                Pageable pageable);
 }

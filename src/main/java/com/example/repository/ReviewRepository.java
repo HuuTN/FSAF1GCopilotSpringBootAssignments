@@ -35,6 +35,7 @@ public interface ReviewRepository extends BaseRepository<Review, Long> {
     @Query("SELECT r FROM Review r WHERE r.product.category.id = :categoryId")
     Page<Review> findByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
     
-    @Query(value = "SELECT * FROM review WHERE product_id = :productId ORDER BY rating DESC LIMIT :limit", nativeQuery = true)
-    List<Review> findTopRatedReviews(@Param("productId") Long productId, @Param("limit") Integer limit);
+    // MySQL does not support parameterized LIMIT in native queries directly. Use Pageable for limiting results.
+    @Query(value = "SELECT * FROM review WHERE product_id = :productId ORDER BY rating DESC", nativeQuery = true)
+    List<Review> findTopRatedReviews(@Param("productId") Long productId, Pageable pageable);
 }
