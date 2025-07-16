@@ -1,0 +1,311 @@
+{
+  "info": {
+    "_postman_id": "b1e2c3d4-5678-1234-9abc-def012345678",
+    "name": "User API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for User API with tests."
+  },
+  "item": [
+    {
+      "name": "Create Valid User",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"role\": \"USER\"\n}"
+        },
+        "url": { "raw": "http://localhost:8080/api/users", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "users"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Response has id, name, email, role\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('id');",
+              "    pm.expect(json).to.have.property('name', 'John Doe');",
+              "    pm.expect(json).to.have.property('email', 'john.doe@example.com');",
+              "    pm.expect(json).to.have.property('role', 'USER');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Invalid User (Missing Fields)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"invalid\"\n}"
+        },
+        "url": { "raw": "http://localhost:8080/api/users", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "users"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Validation error message present\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('error', 'Validation Failed');",
+              "    pm.expect(json.message).to.be.an('object');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Existing User",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:8080/api/users/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "users", "1"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Response has id, name, email, role\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('id');",
+              "    pm.expect(json).to.have.property('name');",
+              "    pm.expect(json).to.have.property('email');",
+              "    pm.expect(json).to.have.property('role');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Non-existent User",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:8080/api/users/9999", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "users", "9999"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "pm.test(\"Error message present\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('error', 'Not Found');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update User",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane.doe@example.com\",\n  \"role\": \"ADMIN\"\n}"
+        },
+        "url": { "raw": "http://localhost:8080/api/users/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "users", "1"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Updated user fields\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('name', 'Jane Doe');",
+              "    pm.expect(json).to.have.property('email', 'jane.doe@example.com');",
+              "    pm.expect(json).to.have.property('role', 'ADMIN');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete User",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": { "raw": "http://localhost:8080/api/users/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "users", "1"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 204\", function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Category",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Electronics\"\n}"
+        },
+        "url": { "raw": "http://localhost:8080/api/categories", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "categories"] }
+      }
+    },
+    {
+      "name": "Create Product",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Laptop\",\n  \"description\": \"Gaming Laptop\",\n  \"price\": 1500.00,\n  \"stockQuantity\": 5,\n  \"categoryId\": 1\n}"
+        },
+        "url": { "raw": "http://localhost:8080/api/products", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "products"] }
+      }
+    },
+    {
+      "name": "Advanced Product Search (keyword & price)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/products?keyword=Laptop&minPrice=1000&maxPrice=2000",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "products"],
+          "query": [
+            { "key": "keyword", "value": "Laptop" },
+            { "key": "minPrice", "value": "1000" },
+            { "key": "maxPrice", "value": "2000" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Advanced Product Search (category)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/products?categoryId=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "products"],
+          "query": [
+            { "key": "categoryId", "value": "1" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Place Order (success)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 1,\n  \"items\": [{\n    \"productId\": 1,\n    \"quantity\": 2\n  }]\n}"
+        },
+        "url": { "raw": "http://localhost:8080/api/orders", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "orders"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Order contains correct userId and items\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('userId', 1);",
+              "    pm.expect(json.items[0]).to.have.property('productId', 1);",
+              "    pm.expect(json.items[0]).to.have.property('quantity', 2);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Place Order (out of stock)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 1,\n  \"items\": [{\n    \"productId\": 1,\n    \"quantity\": 100\n  }]\n}"
+        },
+        "url": { "raw": "http://localhost:8080/api/orders", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "orders"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 500 or 400\", function () {",
+              "    pm.expect([400,500]).to.include(pm.response.code);",
+              "});",
+              "pm.test(\"Error message for insufficient stock\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.message || json.error).to.include('Insufficient stock');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}
