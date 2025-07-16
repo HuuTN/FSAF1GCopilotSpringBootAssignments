@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lab4-springboot</a> &gt; <a href="index.source.html" class="el_package">com.example.lab4.service.serviceimpl</a> &gt; <span class="el_source">UserServiceImpl.java</span></div><h1>UserServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.lab4.service.serviceimpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.stereotype.Service;
+
+import com.example.lab4.model.dto.UserDTO;
+import com.example.lab4.model.entity.User;
+import com.example.lab4.repository.UserRepository;
+import com.example.lab4.service.UserService;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+<span class="fc" id="L18">public class UserServiceImpl implements UserService {</span>
+    @Autowired
+    private UserRepository userRepository;
+
+    private UserDTO toDTO(User user) {
+<span class="fc" id="L23">        UserDTO dto = new UserDTO();</span>
+<span class="fc" id="L24">        dto.setId(user.getId());</span>
+<span class="fc" id="L25">        dto.setUsername(user.getUsername());</span>
+<span class="fc" id="L26">        dto.setEmail(user.getEmail());</span>
+<span class="fc" id="L27">        return dto;</span>
+    }
+
+    private User toEntity(UserDTO dto) {
+<span class="fc" id="L31">        User user = new User();</span>
+<span class="fc" id="L32">        user.setId(dto.getId());</span>
+<span class="fc" id="L33">        user.setUsername(dto.getUsername());</span>
+<span class="fc" id="L34">        user.setEmail(dto.getEmail());</span>
+<span class="fc" id="L35">        return user;</span>
+    }
+
+    public Page&lt;UserDTO&gt; getAllUsers(Pageable pageable) {
+<span class="fc" id="L39">        Page&lt;User&gt; page = userRepository.findAll(pageable);</span>
+<span class="fc" id="L40">        return new PageImpl&lt;&gt;(</span>
+<span class="fc" id="L41">            page.getContent().stream().map(this::toDTO).collect(Collectors.toList()),</span>
+            pageable,
+<span class="fc" id="L43">            page.getTotalElements()</span>
+        );
+    }
+
+    public Optional&lt;UserDTO&gt; getUserById(Long id) {
+<span class="fc" id="L48">        return userRepository.findById(id).map(this::toDTO);</span>
+    }
+
+    public UserDTO createUser(UserDTO userDTO) {
+<span class="fc" id="L52">        userDTO.setId(null);</span>
+<span class="fc" id="L53">        User user = toEntity(userDTO);</span>
+<span class="fc" id="L54">        User saved = userRepository.save(user);</span>
+<span class="fc" id="L55">        return toDTO(saved);</span>
+    }
+
+    public Optional&lt;UserDTO&gt; updateUser(Long id, UserDTO userDTO) {
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (!userRepository.existsById(id)) return Optional.empty();</span>
+<span class="fc" id="L60">        userDTO.setId(id);</span>
+<span class="fc" id="L61">        User user = toEntity(userDTO);</span>
+<span class="fc" id="L62">        User saved = userRepository.save(user);</span>
+<span class="fc" id="L63">        return Optional.of(toDTO(saved));</span>
+    }
+
+    public boolean deleteUser(Long id) {
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (!userRepository.existsById(id)) return false;</span>
+<span class="fc" id="L68">        userRepository.deleteById(id);</span>
+<span class="fc" id="L69">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
